@@ -1,0 +1,249 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[      7757,        240]
+NotebookOptionsPosition[      6502,        191]
+NotebookOutlinePosition[      6844,        206]
+CellTagsIndexPosition[      6801,        203]
+WindowFrame->Normal
+ContainsDynamic->False*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[{
+ "Calculate Maximum \[Beta] Kinetic Energy from ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox["\[InvisiblePrefixScriptBase]", "137"], "Cs"}], 
+   TraditionalForm]], "None",
+  FormatType->"TraditionalForm"]
+}], "Subtitle",
+ CellChangeTimes->{{3.447596456769103*^9, 3.447596485472228*^9}, {
+  3.447598563706603*^9, 3.447598601378478*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Here we bring in Mathematica' s Units and Physical Constants packages\
+\>", "Subsection",
+ CellChangeTimes->{{3.447596504190978*^9, 3.447596528769103*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Needs", "[", "\"\<Units`\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Needs", "[", "\"\<PhysicalConstants`\>\"", "]"}]}], "Input",
+ CellChangeTimes->{{3.447595312769103*^9, 3.447595320597228*^9}, {
+  3.447595558362853*^9, 3.447595576972228*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Define some convenient conversion factors", "Subsection",
+ CellChangeTimes->{{3.447596504190978*^9, 3.447596528769103*^9}, {
+  3.447596806675353*^9, 3.447596823925353*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"cLight", "=", 
+  RowBox[{"1.0", " ", "SpeedOfLight"}]}], "\[IndentingNewLine]", 
+ RowBox[{"MeV", "=", 
+  RowBox[{"Mega", " ", "ElectronVolt"}]}], "\[IndentingNewLine]", 
+ RowBox[{"amu", "=", 
+  RowBox[{"Convert", "[", 
+   RowBox[{
+    RowBox[{"1.0", " ", "AtomicMassUnit", " ", 
+     RowBox[{"cLight", "^", "2"}]}], ",", "MeV"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Melectron", "=", 
+  RowBox[{"Convert", "[", 
+   RowBox[{
+    RowBox[{"ElectronMass", " ", 
+     RowBox[{"cLight", "^", "2"}]}], ",", " ", "MeV"}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.447596553503478*^9, 3.447596715331603*^9}}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"2.99792458`*^8", " ", "Meter"}], "Second"]], "Output",
+ CellChangeTimes->{{3.447596618862853*^9, 3.447596627612853*^9}, 
+   3.447596716347228*^9, 3.447598430815978*^9}],
+
+Cell[BoxData[
+ RowBox[{"ElectronVolt", " ", "Mega"}]], "Output",
+ CellChangeTimes->{{3.447596618862853*^9, 3.447596627612853*^9}, 
+   3.447596716347228*^9, 3.447598430847228*^9}],
+
+Cell[BoxData[
+ RowBox[{"931.494333558365`", " ", "ElectronVolt", " ", "Mega"}]], "Output",
+ CellChangeTimes->{{3.447596618862853*^9, 3.447596627612853*^9}, 
+   3.447596716347228*^9, 3.447598430862853*^9}],
+
+Cell[BoxData[
+ RowBox[{"0.510998640980972`", " ", "ElectronVolt", " ", "Mega"}]], "Output",
+ CellChangeTimes->{{3.447596618862853*^9, 3.447596627612853*^9}, 
+   3.447596716347228*^9, 3.447598430878478*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Now for the isotope data base. When you execute these lines the first time, \
+",
+ StyleBox["Mathematica",
+  FontSlant->"Italic"],
+ " will go onto the web and download a bunch of information (which could take \
+a while...)"
+}], "Subsection",
+ CellChangeTimes->{{3.447596504190978*^9, 3.447596528769103*^9}, {
+  3.447596854565978*^9, 3.447596936362853*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"IsotopeData", "[", "\"\<Properties\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.447596997644103*^9, 3.447597000003478*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"AtomicMass\"\>", ",", "\<\"AtomicNumber\"\>", 
+   ",", "\<\"BindingEnergy\"\>", ",", "\<\"BranchingRatios\"\>", 
+   ",", "\<\"DaughterNuclides\"\>", ",", "\<\"DecayEnergies\"\>", 
+   ",", "\<\"DecayModes\"\>", ",", "\<\"DecayModeSymbols\"\>", 
+   ",", "\<\"DecayProducts\"\>", ",", "\<\"ExcitedStateEnergies\"\>", 
+   ",", "\<\"ExcitedStateHalfLives\"\>", ",", "\<\"ExcitedStateLifetimes\"\>",
+    ",", "\<\"ExcitedStateParities\"\>", ",", "\<\"ExcitedStateSpins\"\>", 
+   ",", "\<\"ExcitedStateWidths\"\>", ",", "\<\"FullSymbol\"\>", 
+   ",", "\<\"HalfLife\"\>", ",", "\<\"IsotopeAbundance\"\>", 
+   ",", "\<\"Lifetime\"\>", ",", "\<\"MagneticMoment\"\>", 
+   ",", "\<\"MassExcess\"\>", ",", "\<\"MassNumber\"\>", 
+   ",", "\<\"Memberships\"\>", ",", "\<\"Name\"\>", 
+   ",", "\<\"NeutronNumber\"\>", ",", "\<\"Parity\"\>", 
+   ",", "\<\"QuadrupoleMoment\"\>", ",", "\<\"QuantumStatistics\"\>", 
+   ",", "\<\"Spin\"\>", ",", "\<\"Stable\"\>", ",", "\<\"StandardName\"\>", 
+   ",", "\<\"Symbol\"\>", ",", "\<\"Width\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{3.447597001253478*^9, 3.447598438940978*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Calculate the max \[Beta] kinetic energy using the isotope atomic masses\
+\>", "Subsection",
+ CellChangeTimes->{{3.447596504190978*^9, 3.447596528769103*^9}, {
+  3.447596854565978*^9, 3.447596936362853*^9}, {3.447597141206603*^9, 
+  3.447597191112853*^9}}],
+
+Cell["Units of the atomic mass data : AMU", "Text",
+ CellChangeTimes->{{3.447597277315978*^9, 3.447597293144103*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"IsotopeData", "[", 
+  RowBox[{
+  "\"\<Cesium137\>\"", ",", "\"\<AtomicMass\>\"", ",", "\"\<Units\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.447594601612853*^9, 3.447594629925353*^9}, {
+  3.447594791300353*^9, 3.447594795940978*^9}, {3.447597248612853*^9, 
+  3.447597251362853*^9}}],
+
+Cell[BoxData["\<\"AtomicMassUnits\"\>"], "Output",
+ CellChangeTimes->{3.447597252175353*^9, 3.447598446503478*^9}]
+}, Open  ]],
+
+Cell["Atomic mass difference. Use our 'amu' to convert to MeV", "Text",
+ CellChangeTimes->{{3.447597277315978*^9, 3.447597329784728*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{"IsotopeData", "[", 
+     RowBox[{"\"\<Cesium137\>\"", ",", "\"\<AtomicMass\>\""}], "]"}], "-", 
+    RowBox[{"IsotopeData", "[", 
+     RowBox[{"\"\<Barium137\>\"", ",", "\"\<AtomicMass\>\""}], "]"}]}], ")"}],
+   "amu"}]], "Input",
+ CellChangeTimes->{{3.447597369847228*^9, 3.447597374659728*^9}}],
+
+Cell[BoxData[
+ RowBox[{"1.1756287519463435`", " ", "ElectronVolt", " ", "Mega"}]], "Output",\
+
+ CellChangeTimes->{{3.447597361425353*^9, 3.447597375550353*^9}, 
+   3.447598446800353*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{615, 750},
+WindowMargins->{{Automatic, 592}, {Automatic, 152}},
+FrontEndVersion->"6.0 for Microsoft Windows (32-bit) (May 21, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[590, 23, 366, 10, 52, "Subtitle"],
+Cell[CellGroupData[{
+Cell[981, 37, 165, 3, 36, "Subsection"],
+Cell[1149, 42, 272, 4, 52, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1458, 51, 178, 2, 36, "Subsection"],
+Cell[CellGroupData[{
+Cell[1661, 57, 634, 16, 92, "Input"],
+Cell[2298, 75, 207, 4, 48, "Output"],
+Cell[2508, 81, 178, 3, 30, "Output"],
+Cell[2689, 86, 204, 3, 30, "Output"],
+Cell[2896, 91, 205, 3, 30, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3150, 100, 373, 9, 70, "Subsection"],
+Cell[CellGroupData[{
+Cell[3548, 113, 147, 2, 31, "Input"],
+Cell[3698, 117, 1149, 18, 164, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4896, 141, 266, 5, 36, "Subsection"],
+Cell[5165, 148, 117, 1, 29, "Text"],
+Cell[CellGroupData[{
+Cell[5307, 153, 312, 7, 31, "Input"],
+Cell[5622, 162, 114, 1, 30, "Output"]
+}, Open  ]],
+Cell[5751, 166, 137, 1, 29, "Text"],
+Cell[CellGroupData[{
+Cell[5913, 171, 360, 9, 52, "Input"],
+Cell[6276, 182, 186, 4, 30, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

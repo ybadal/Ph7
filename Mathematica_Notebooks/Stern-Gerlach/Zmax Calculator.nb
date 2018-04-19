@@ -1,0 +1,621 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     24194,        613]
+NotebookOptionsPosition[     20627,        527]
+NotebookOutlinePosition[     21286,        552]
+CellTagsIndexPosition[     21201,        547]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Zmax Calculator
+for Stern-Gerlach\
+\>", "Subtitle",
+ CellChangeTimes->{{3.448309521591875*^9, 3.448309559779375*^9}, {
+  3.449236220296875*^9, 
+  3.449236223*^9}},ExpressionUUID->"13dd0668-cf7b-4881-9b89-192dd4e44f67"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Button", "[", 
+  RowBox[{
+  "\"\<Open \!\(\*SubscriptBox[\(Z\), \(max\)]\) Calculator\>\"", ",", 
+   "ZmaxDialog"}], "]"}]], "Input",
+ CellChangeTimes->{{3.448311174091875*^9, 3.44831121892*^9}, {
+  3.449236229609375*^9, 3.44923623275*^9}, {3.449238004421875*^9, 
+  3.449238021734375*^9}},ExpressionUUID->"778e1413-9ee6-4fab-8e4c-\
+871f6f693510"],
+
+Cell[BoxData[
+ ButtonBox["\<\"Open \\!\\(\\*SubscriptBox[\\(Z\\), \\(max\\)]\\) \
+Calculator\"\>",
+  Appearance->{Automatic, "DialogBox", "Normal", Automatic},
+  ButtonFunction:>$CellContext`ZmaxDialog,
+  Evaluator->Automatic,
+  Method->"Preemptive"]], "Output",
+ CellChangeTimes->{3.448311999873125*^9, 
+  3.4492380238125*^9},ExpressionUUID->"4b6a8af8-1d96-4303-b905-7a11c4806e6c"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "Zmax"}]], "Input",
+ CellChangeTimes->{{3.449239655828125*^9, 
+  3.44923965825*^9}},ExpressionUUID->"51494254-f727-4e1f-915e-fd980b395923"],
+
+Cell[BoxData[
+ StyleBox["\<\"Zmax[B,\!\(\*SubscriptBox[\(T\), \(oven\)]\)] calculates \
+\!\(\*SubscriptBox[\(Z\), \(max\)]\) (in millimeters) for magnetic field B \
+(Tesla) and oven temperature \!\(\*SubscriptBox[\(T\), \(oven\)]\) (Celsius). \
+The expected distance between peaks is twice Zmax.\"\>", "MSG"]], "Print", \
+"PrintUsage",
+ CellChangeTimes->{3.449245160703125*^9},
+ CellTags->
+  "Info3449219960-5528363",ExpressionUUID->"2d698ba2-b560-4f78-b8be-\
+ca6269724359"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["Zplot"], "Input",
+ CellChangeTimes->{{3.44831191232625*^9, 3.448311913091875*^9}, {
+  3.4492362433125*^9, 
+  3.44923624565625*^9}},ExpressionUUID->"179b0b7e-e94d-41a8-a969-\
+7c136e41e12e"],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {}, 
+   {Hue[0.67, 0.6, 0.6], Thickness[Large], LineBox[CompressedData["
+1:eJwVzH08E3gAx3FESC16uBqHPHZFKT1dj1/FpYRiq+hmSiRzXLmVVF7oKI91
+L7lyN0p43VUsxFxHro6dOld68FRtyFrzMDFsY2N2v/74vr6v9z8fm5Dv/cP0
+dHR0fMk+v1dY36vH/WHbyoWz+2kLQrfpu5uf6KZ6oFGvsN09cgfW3MzNq6TS
+UbpKzbWI9Mee5x3386mhuOn52y+GkSE4GDpel01lg0o7f0XDikGnyyX3LGoy
+2gPC0ydYF1CwcO/FdGoOqgRCQyUrG0lGlUvTqMWwy7/eKGcVIiDwVplspAqx
+K8xPu62uhIk2ieFp9QhKOafw9o8P4eA31NeQwYdx2rn4gpZ6xDZvRK78X4SW
+1b7KfvoEi6rMunR1X2B2eptr+/FnqBa5P3ux5TV2TOt0WVe/RD0r3yJwsBXi
+zCzuEucWKBy3zuVGdaBUcXFGU2wb9FQlphYO7/Dt3bSomYoOrNcerqbdE2L1
+RlWQ1PMdniWvbW5c3o1oy+DAL68IYf2TVHVn6D2u+jQff2/YDel4d1fbKhGG
+nfYnOJa8R/FAbRPl8gcYd3jSHaU9oFj+PiwWi9FWylvp7fABmRG8YwX2EvCG
+A713eomhdCsRH0/oReobPblx6kewXflVXzT0IXqlqOtWuQTd9/gZr2wGsHt5
+I23GaC8mWa2cZWelaN/n0Jy+oh9O2w2nj9UOIlZckyGhDcCz0Ca8YtEQTKz2
+t5hclSLWMti2hzGMSr4D06BuEM6D+006fGSYc+3kkH3PJ8yfKzPiq2VgzKk3
+olgNQ/8Rp8wubwTdZ+wrP9rKELm29q3xnlEYbxtwXNYgQ8nukIK/lKO4nBuV
+n3B4BAqpuank2hjylmWucxsbAY/mOSPHQ47iOdzssOxRJOxKuVklkWPdVxFm
+Cscx2HR6vSlKUWDJG1H29Qdj2LQhOYfqqoSBgPn2xgE5GFYvVLotSvyw4PR2
+0wE5FE1ZohNJ4xAUXImWpCmQq89k+9tP4PlRjzpHayXmd/EK9fgTWPywmnK2
+gnTik+gbT6rADHdycN03Dp07zDLRPDWcd28OoovHEfNrWda8ejUU8T6HBMkT
+qHNKNTKLnsTiXZaHTtmqYOYV43yBMgX+rtRzcTwVhCtetsQ9nAIrT3FERFej
+/AbsxUwNch2nI3j9agSVrTeznNbAZiefzTk3icSUW0nCu9MofpDpIaFOgdtn
+yaF4a1F+RLaOw52Cnxnl6ydqLaqDDgxW+WiQbqBnISRmLRXMfUrMVyk0MmKr
+keA1AuL1os4G80ktkpMjzur6amBeyd0bTexXct7Il1hE9wlfOKXFwEShfS8x
+Ozfz2lGNFtY5wwzqPg24mYlxZ4hfB7ETnYkliWxGFnHKUlURiAMiGLZ/EA/W
+6EnDiLducr43a1qLP3sWxt0nnin8758KYrrLlp/3+GmAl49uNxIbqh4/YBKf
+4VdmCIhr6r8RniQeKOX4GWi1WHJgr10ucXN8ZGcA8afzIRViYsOY4MdRxAU7
+e1vHid2O0YouENNMv5uY5a/Bfd/NEaXENUWnsJpYusPF+2/iqCh1iAex/QY7
+l/bP/Q0JFw8SM50WzZMSt+ro32URX7c2UWiJLzWlPo8n/h/ncINc
+     "]]}},
+  AspectRatio->1,
+  Axes->True,
+  AxesOrigin->{0, 0},
+  Frame->True,
+  FrameLabel->{
+    FormBox[
+     StyleBox["\"B (Tesla)\"", Larger, Italic, StripOnInput -> False], 
+     TraditionalForm], 
+    FormBox[
+     StyleBox[
+     "\"\\!\\(\\*SubscriptBox[\\(Z\\), \\(max\\)]\\) (millimeters)\"", Larger,
+       Italic, StripOnInput -> False], TraditionalForm]},
+  GridLines->Automatic,
+  GridLinesStyle->GrayLevel[0.85],
+  ImageSize->450,
+  PlotLabel->FormBox[
+    StyleBox[
+    "\"\\!\\(\\*SubscriptBox[\\(Z\\), \\(max\\)]\\) for 116\[Degree]C Oven\"",
+      Larger, StripOnInput -> False], TraditionalForm],
+  PlotRange->{{0, 2}, {0., 1.8326395062146348`}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Output",
+ CellChangeTimes->{
+  3.448312000091875*^9, {3.449236052953125*^9, 3.449236066625*^9}, 
+   3.449238223609375*^9},ExpressionUUID->"6488aad9-e3e1-491a-8063-\
+4f6d4e6a7874"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Initialization Code", "Section",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448311437748125*^9, 
+  3.448311444466875*^9}},ExpressionUUID->"7f359a50-df36-4fb2-90f6-\
+5bb35ca56ceb"],
+
+Cell[CellGroupData[{
+
+Cell["Constants of nature", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44830956688875*^9, 3.448309577748125*^9}, {
+  3.44923627396875*^9, 3.449236339*^9}, {3.449236432875*^9, 
+  3.44923644396875*^9}},ExpressionUUID->"7b2fdc7e-1a14-4ef7-90fc-\
+516d571442a8"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"Needs", "[", "\"\<Units`\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Needs", "[", "\"\<PhysicalConstants`\>\"", "]"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448309221373125*^9, 3.4483092561075*^9}, {
+  3.449236458515625*^9, 3.449236470671875*^9}, {3.449236538421875*^9, 
+  3.449236546203125*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"d3c4a385-841e-452c-8d1c-ca0732dbdbbe"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General","obspkg",
+   "\"\\!\\(\\*RowBox[{\\\"\\\\\\\"PhysicalConstants`\\\\\\\"\\\"}]\\) is now \
+obsolete. The legacy version being loaded may conflict with current \
+functionality. See the Compatibility Guide for updating information.\"",2,2,1,
+   26580089631761812515,"Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{3.7330695660174026`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"f514428d-59a2-4526-9c48-9a1a7bc4e41b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[Mu]", "B"], "=", 
+   RowBox[{"Convert", "[", 
+    RowBox[{"BohrMagneton", ",", 
+     RowBox[{"Joule", "/", "Tesla"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["k", "B"], "=", 
+   RowBox[{"Convert", "[", 
+    RowBox[{"BoltzmannConstant", ",", 
+     RowBox[{"Joule", "/", "Kelvin"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"T", "[", "tempC_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"ConvertTemperature", "[", 
+    RowBox[{
+     RowBox[{"1.0", "tempC"}], ",", "Celsius", ",", "Kelvin"}], "]"}], 
+   "Kelvin"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448309221373125*^9, 3.4483092561075*^9}, {
+  3.449236458515625*^9, 3.449236470671875*^9}, {3.449236538421875*^9, 
+  3.449236546203125*^9}, {3.4492366865*^9, 3.44923674178125*^9}, {
+  3.449236784953125*^9, 3.44923678903125*^9}, {3.449236848609375*^9, 
+  3.44923691315625*^9}, {3.4492375145*^9, 3.44923754784375*^9}, {
+  3.44923758784375*^9, 3.449237635515625*^9}, {3.449237706*^9, 
+  3.449237725140625*^9}, {3.44923778609375*^9, 3.449237792171875*^9}},
+ CellLabel->"In[3]:=",ExpressionUUID->"070695ff-39ba-48a8-bdaf-ce4265b52d25"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Convert","temp",
+   "\"Warning: Convert[old,new] converts units of temperature. \
+ConvertTemperature[temp,old,new] converts absolute temperature.\"",2,4,2,
+   26580089631761812515,"Local","Units`Convert"},
+  "MessageTemplate2"]], "Message", "MSG",
+ InitializationCell->True,
+ CellChangeTimes->{3.4492377354375*^9, 3.44923779596875*^9, 
+  3.449238988515625*^9, 3.449239169375*^9, 3.449239938703125*^9, 
+  3.449245105953125*^9, 3.449245156421875*^9, 3.449245200625*^9, 
+  3.449249779765625*^9, 3.733069566142714*^9},
+ CellLabel->
+  "During evaluation of \
+In[3]:=",ExpressionUUID->"d151ef72-f70f-46f9-b2d4-889a50bdb452"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Dimensions of the apparatus", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44830956688875*^9, 3.448309577748125*^9}, {
+  3.44923627396875*^9, 3.449236339*^9}, {3.449236432875*^9, 
+  3.44923644396875*^9}, {3.449236932953125*^9, 
+  3.44923695084375*^9}},ExpressionUUID->"729fb63b-ede6-4974-bab2-\
+6d17617ecf2d"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   SubscriptBox["L", "2"], "=", 
+   RowBox[{"12.7", " ", "Centimeter"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["L", "3"], "=", 
+   RowBox[{"7.9", " ", "Centimeter"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dLogB", "=", 
+   RowBox[{"1.76", 
+    SuperscriptBox["Centimeter", 
+     RowBox[{"-", "1"}]]}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448309221373125*^9, 3.4483092561075*^9}, {
+  3.449236458515625*^9, 3.449236470671875*^9}, {3.449236538421875*^9, 
+  3.449236546203125*^9}, {3.4492366865*^9, 3.44923674178125*^9}, {
+  3.449236784953125*^9, 3.44923678903125*^9}, {3.449236848609375*^9, 
+  3.44923691315625*^9}, {3.44923697175*^9, 3.4492370008125*^9}, {
+  3.44923707059375*^9, 3.449237075015625*^9}, {3.449237117234375*^9, 
+  3.449237152015625*^9}},
+ CellLabel->"In[6]:=",ExpressionUUID->"cd206df7-9f82-48d2-a2c6-8f93a61d2ab5"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Zmax as a function of B and Temperature", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44830956688875*^9, 3.448309577748125*^9}, {
+  3.44923627396875*^9, 
+  3.449236339*^9}},ExpressionUUID->"df487608-73c4-41af-be94-0bfb68593250"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Zmax", "[", 
+   RowBox[{"Bz_", ",", "Toven_"}], "]"}], ":=", 
+  RowBox[{"Bz", " ", 
+   RowBox[{"Convert", "[", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{
+        SubscriptBox["L", "2"], 
+        RowBox[{"(", 
+         RowBox[{
+          FractionBox[
+           SubscriptBox["L", "2"], "2"], "+", 
+          SubscriptBox["L", "3"]}], ")"}], 
+        SubscriptBox["\[Mu]", "B"]}], 
+       RowBox[{"6", 
+        SubscriptBox["k", "B"], " ", 
+        RowBox[{"T", "[", "Toven", "]"}]}]], "dLogB", "  ", 
+      FractionBox["Tesla", 
+       RowBox[{"Milli", " ", "Meter"}]]}], ",", "1"}], 
+    "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Zmax", "::", "usage"}], "=", 
+  "\"\<Zmax[B,\!\(\*SubscriptBox[\(T\), \(oven\)]\)] calculates \
+\!\(\*SubscriptBox[\(Z\), \(max\)]\) (in millimeters) for magnetic field B \
+(Tesla) and oven temperature \!\(\*SubscriptBox[\(T\), \(oven\)]\) (Celsius). \
+The expected distance between peaks is twice Zmax.\>\""}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448309221373125*^9, 3.4483092561075*^9}, {
+   3.449237173140625*^9, 3.449237317578125*^9}, {3.44923734765625*^9, 
+   3.449237433234375*^9}, {3.44923783759375*^9, 3.449237910171875*^9}, {
+   3.449239478921875*^9, 3.449239642953125*^9}, 3.44924513659375*^9},
+ CellLabel->"In[9]:=",ExpressionUUID->"13334c86-4fd6-459e-af5e-716f9c692762"],
+
+Cell[BoxData["\<\"Zmax[B,\\!\\(\\*SubscriptBox[\\(T\\), \\(oven\\)]\\)] \
+calculates \\!\\(\\*SubscriptBox[\\(Z\\), \\(max\\)]\\) (in millimeters) for \
+magnetic field B (Tesla) and oven temperature \\!\\(\\*SubscriptBox[\\(T\\), \
+\\(oven\\)]\\) (Celsius). The expected distance between peaks is twice \
+Zmax.\"\>"], "Output",
+ CellChangeTimes->{3.449245156453125*^9, 3.449245200640625*^9, 
+  3.4492497798125*^9, 3.733069566173829*^9},
+ CellLabel->"Out[10]=",ExpressionUUID->"e32f7b7e-4a96-4ae6-94c8-dab3c8a5a50f"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The plot", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44830961701375*^9, 3.4483096354825*^9}, {
+  3.449238085203125*^9, 
+  3.4492380869375*^9}},ExpressionUUID->"521e4794-0850-43dc-b6da-a77e03010ff1"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Zplot", "=", 
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"Zmax", "[", 
+       RowBox[{"b", ",", "116"}], "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"b", ",", "0", ",", "2"}], "}"}], ",", 
+     RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+     RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+     RowBox[{"PlotLabel", "\[Rule]", 
+      RowBox[{"Style", "[", 
+       RowBox[{
+       "\"\<\!\(\*SubscriptBox[\(Z\), \(max\)]\) for 116\[Degree]C Oven\>\"", 
+        ",", "Larger"}], "]"}]}], ",", 
+     RowBox[{"GridLines", "\[Rule]", "Automatic"}], ",", 
+     RowBox[{"GridLinesStyle", "\[Rule]", 
+      RowBox[{"GrayLevel", "[", ".85", "]"}]}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", "Thick"}], ",", 
+     RowBox[{"FrameLabel", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Style", "[", 
+         RowBox[{"\"\<B (Tesla)\>\"", ",", "Larger", ",", "Italic"}], "]"}], 
+        ",", 
+        RowBox[{"Style", "[", 
+         RowBox[{
+         "\"\<\!\(\*SubscriptBox[\(Z\), \(max\)]\) (millimeters)\>\"", ",", 
+          "Larger", ",", "Italic"}], "]"}]}], "}"}]}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", "450"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448308192779375*^9, 3.448308296295*^9}, {
+  3.448308475966875*^9, 3.44830847663875*^9}, {3.448308686045*^9, 
+  3.448308776795*^9}, {3.44830945392*^9, 3.448309459591875*^9}, {
+  3.448309655966875*^9, 3.448309660748125*^9}, {3.448311314248125*^9, 
+  3.44831139767*^9}, {3.4483115842325*^9, 3.448311901623125*^9}, {
+  3.44923603884375*^9, 3.44923605978125*^9}, {3.449238100140625*^9, 
+  3.44923821278125*^9}},ExpressionUUID->"cd30d402-dbe8-43c5-bfff-\
+36bc9d587015"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Here is a dynamic calculator of Zmax in a dialog window", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448309686091875*^9, 3.448309702404375*^9}, {
+  3.448311263216875*^9, 3.448311269966875*^9}, {3.449245123859375*^9, 
+  3.449245124859375*^9}},ExpressionUUID->"a1c0e12a-318f-49dc-9e67-\
+a9320e71b67c"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ZmaxNotebook", "=", 
+   RowBox[{"Notebook", "[", 
+    RowBox[{"{", "}"}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.448311070654375*^9, {3.449238255484375*^9, 
+   3.44923829071875*^9}},ExpressionUUID->"a61799fa-1a39-4fe5-a3ff-\
+f2f04ddf9c38"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ZmaxDialog", " ", ":=", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"ZmaxNotebook", "===", 
+      RowBox[{"Notebook", "[", 
+       RowBox[{"{", "}"}], "]"}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"ZmaxNotebook", "=", 
+       RowBox[{"CreateDialog", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"Block", "[", 
+             RowBox[{
+              RowBox[{"{", "z", "}"}], ",", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"z", "=", 
+                RowBox[{"Zmax", "[", 
+                 RowBox[{"Bz", ",", "Toven"}], "]"}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"Grid", "[", 
+                RowBox[{
+                 RowBox[{"{", "\[IndentingNewLine]", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Tooltip", "[", 
+                    RowBox[{
+                    RowBox[{"Style", "[", 
+                    RowBox[{
+                    "\"\<\!\(\*SubscriptBox[\(Z\), \(max\)]\) (mm): \>\"", 
+                    ",", 
+                    RowBox[{"FontFamily", "\[Rule]", "\"\<Helvetica\>\""}]}], 
+                    "]"}], ",", 
+                    "\"\<\!\(\*SubscriptBox[\(Z\), \(max\)]\) calculated from \
+the magnetic field and oven temperature\>\""}], "]"}], ",", 
+                    RowBox[{"Tooltip", "[", 
+                    RowBox[{
+                    RowBox[{"Style", "[", 
+                    RowBox[{
+                    RowBox[{"ToString", "[", " ", 
+                    RowBox[{"Round", "[", 
+                    RowBox[{"z", ",", ".001"}], "]"}], "]"}], ",", 
+                    RowBox[{"FontFamily", "\[Rule]", "\"\<Helvetica\>\""}]}], 
+                    "]"}], ",", 
+                    "\"\<\!\(\*SubscriptBox[\(Z\), \(max\)]\) calculated from \
+the magnetic field and oven temperature (millimeters)\>\""}], "]"}]}], "}"}], 
+                   ",", 
+                   RowBox[{"{", "}"}]}], "\[IndentingNewLine]", "}"}], ",", 
+                 RowBox[{"Alignment", "\[Rule]", 
+                  RowBox[{"{", 
+                   RowBox[{"Left", ",", "Baseline"}], "}"}]}]}], "]"}]}]}], 
+             RowBox[{"(*", " ", "Grid", " ", "*)"}], "\[IndentingNewLine]", 
+             "]"}], 
+            RowBox[{"(*", " ", "Block", " ", "*)"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"Style", "[", 
+             RowBox[{
+             "\"\<Enter Magnetic Field (Tesla) and Oven Temp (Celsius):\>\"", 
+              ",", "Larger"}], "]"}], ",", "\"\<\>\"", ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+               "Bz", ",", "1.0", ",", "\[IndentingNewLine]", 
+                "\"\<Magnetic Field (Tesla)\>\""}], "}"}], 
+              "\[IndentingNewLine]", ",", 
+              RowBox[{"ControlType", "\[Rule]", "InputField"}]}], "}"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+               "Toven", ",", "116.", ",", "\[IndentingNewLine]", 
+                "\"\<Oven Temperature (Celsius)\>\""}], "}"}], 
+              "\[IndentingNewLine]", ",", 
+              RowBox[{"ControlType", "\[Rule]", "InputField"}]}], "}"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"AppearanceElements", "\[Rule]", "None"}]}], "]"}], 
+          RowBox[{"(*", " ", "Manipulate", " ", "*)"}], "\[IndentingNewLine]",
+           "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"Magnification", "\[Rule]", "1.5"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Deployed", "\[Rule]", "True"}], ",", 
+         RowBox[{"ShowCellBracket", "\[Rule]", "False"}], ",", 
+         RowBox[{"Saveable", "\[Rule]", "False"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"WindowSize", "\[Rule]", "All"}], " ", 
+         RowBox[{"(*", 
+          RowBox[{",", 
+           RowBox[{"WindowFrame", "\[Rule]", "\"\<Normal\>\""}], ",", 
+           RowBox[{
+           "WindowElements", "\[Rule]", "\"\<MagnificationPopUp\>\""}]}], " ",
+           "*)"}], ",", 
+         RowBox[{"WindowFloating", "\[Rule]", "False"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+         "WindowTitle", "\[Rule]", 
+          "\"\<Zmax Calculator - Physics 7 Stern-Gerlach\>\""}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"NotebookEventActions", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"\"\<WindowClose\>\"", "\[RuleDelayed]", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"ZmaxNotebook", "=", 
+               RowBox[{"Notebook", "[", 
+                RowBox[{"{", "}"}], "]"}]}], ";"}], ")"}]}], "}"}]}]}], 
+        "\[IndentingNewLine]", "]"}]}], ";"}], ",", 
+     RowBox[{"SetSelectedNotebook", "[", "ZmaxNotebook", "]"}]}], "]"}]}], 
+  ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448309984591875*^9, 3.44831008807625*^9}, {
+   3.44831013326375*^9, 3.448310357310625*^9}, {3.448310475654375*^9, 
+   3.44831052476375*^9}, {3.44831055826375*^9, 3.44831057632625*^9}, {
+   3.448310676498125*^9, 3.448310692623125*^9}, {3.448310748841875*^9, 
+   3.448310773295*^9}, {3.44831089882625*^9, 3.448310950154375*^9}, {
+   3.448310980748125*^9, 3.44831103620125*^9}, 3.44831112388875*^9, {
+   3.449238263*^9, 3.449238416046875*^9}, {3.449238449546875*^9, 
+   3.449238642796875*^9}, {3.4492387365625*^9, 3.44923875775*^9}, {
+   3.44923890859375*^9, 
+   3.4492389523125*^9}},ExpressionUUID->"5d11d30e-e4c5-46a2-96d1-\
+53fb889854df"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]]
+},
+AutoGeneratedPackage->None,
+InitializationCellEvaluation->True,
+InitializationCellWarning->False,
+WindowSize->{849, 1396},
+WindowMargins->{{Automatic, 2}, {Automatic, 20}},
+ShowSelection->True,
+FrontEndVersion->"11.3 for Linux x86 (64-bit) (March 6, 2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Info3449219960-5528363"->{
+  Cell[1782, 60, 474, 9, 62, "Print",ExpressionUUID->"2d698ba2-b560-4f78-b8be-ca6269724359",
+   CellTags->"Info3449219960-5528363"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Info3449219960-5528363", 21044, 541}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 228, 6, 87, "Subtitle",ExpressionUUID->"13dd0668-cf7b-4881-9b89-192dd4e44f67"],
+Cell[CellGroupData[{
+Cell[820, 32, 370, 8, 31, "Input",ExpressionUUID->"778e1413-9ee6-4fab-8e4c-871f6f693510"],
+Cell[1193, 42, 382, 8, 42, "Output",ExpressionUUID->"4b6a8af8-1d96-4303-b905-7a11c4806e6c"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1612, 55, 167, 3, 31, "Input",ExpressionUUID->"51494254-f727-4e1f-915e-fd980b395923"],
+Cell[1782, 60, 474, 9, 62, "Print",ExpressionUUID->"2d698ba2-b560-4f78-b8be-ca6269724359",
+ CellTags->"Info3449219960-5528363"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2293, 74, 202, 4, 31, "Input",ExpressionUUID->"179b0b7e-e94d-41a8-a969-7c136e41e12e"],
+Cell[2498, 80, 2684, 58, 482, "Output",ExpressionUUID->"6488aad9-e3e1-491a-8063-4f6d4e6a7874"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5219, 143, 191, 4, 68, "Section",ExpressionUUID->"7f359a50-df36-4fb2-90f6-5bb35ca56ceb",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[5435, 151, 277, 5, 36, "Subsection",ExpressionUUID->"7b2fdc7e-1a14-4ef7-90fc-516d571442a8",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[5737, 160, 424, 7, 52, "Input",ExpressionUUID->"d3c4a385-841e-452c-8d1c-ca0732dbdbbe",
+ InitializationCell->True],
+Cell[6164, 169, 502, 11, 70, "Message",ExpressionUUID->"f514428d-59a2-4526-9c48-9a1a7bc4e41b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6703, 185, 1215, 29, 72, "Input",ExpressionUUID->"070695ff-39ba-48a8-bdaf-ce4265b52d25",
+ InitializationCell->True],
+Cell[7921, 216, 650, 14, 70, "Message",ExpressionUUID->"d151ef72-f70f-46f9-b2d4-889a50bdb452",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8620, 236, 333, 6, 36, "Subsection",ExpressionUUID->"729fb63b-ede6-4974-bab2-6d17617ecf2d",
+ InitializationCell->True],
+Cell[8956, 244, 944, 22, 72, "Input",ExpressionUUID->"cd206df7-9f82-48d2-a2c6-8f93a61d2ab5",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9937, 271, 253, 4, 36, "Subsection",ExpressionUUID->"df487608-73c4-41af-be94-0bfb68593250",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[10215, 279, 1406, 34, 160, "Input",ExpressionUUID->"13334c86-4fd6-459e-af5e-716f9c692762",
+ InitializationCell->True],
+Cell[11624, 315, 515, 7, 70, "Output",ExpressionUUID->"e32f7b7e-4a96-4ae6-94c8-dab3c8a5a50f"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12188, 328, 225, 4, 36, "Subsection",ExpressionUUID->"521e4794-0850-43dc-b6da-a77e03010ff1",
+ InitializationCell->True],
+Cell[12416, 334, 1744, 40, 132, "Input",ExpressionUUID->"cd30d402-dbe8-43c5-bfff-36bc9d587015",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14197, 379, 325, 5, 36, "Subsection",ExpressionUUID->"a1c0e12a-318f-49dc-9e67-a9320e71b67c",
+ InitializationCell->True],
+Cell[14525, 386, 312, 9, 31, "Input",ExpressionUUID->"a61799fa-1a39-4fe5-a3ff-f2f04ddf9c38",
+ InitializationCell->True],
+Cell[14840, 397, 5747, 125, 712, "Input",ExpressionUUID->"5d11d30e-e4c5-46a2-96d1-53fb889854df",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+

@@ -1,0 +1,1098 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     32010,       1089]
+NotebookOptionsPosition[     28158,        954]
+NotebookOutlinePosition[     28668,        975]
+CellTagsIndexPosition[     28625,        972]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Notebook to Aid in Mossbauer Data Processing for Experiment 28\
+\>", "Subtitle"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Instructions: ",
+ StyleBox["Use this notebook to enter Mossbauer Data",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]]
+}], "Section",
+ CellChangeTimes->{3.47905619853125*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<CurveFit`\>\"", "]"}], ";"}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Initialization Section... This section executes when you use the notebook.\
+\>", "Subsubtitle",
+ InitializationCell->True,
+ FontFamily->"Arial",
+ FontSize->18,
+ FontWeight->"Bold"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Off", "[", 
+   RowBox[{"General", "::", "\"\<spell1\>\""}], "]"}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.47905613025*^9, 3.47905615121875*^9}, {
+  3.4790566384375*^9, 3.47905664509375*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["The Global Data", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["MossData",
+  FontFamily->"Courier New",
+  FontColor->RGBColor[0, 0, 1]],
+ " : The Processed Mosbauer Data Array,an array of data triples: \n    \
+{velocity(mm/sec), rate(1/sec), sigma(1/sec), counts, time (sec)}.\n    (this \
+array will be maintained by the ",
+ StyleBox["fwd[],bkwd[],",
+  FontFamily->"Courier New"],
+ " and ",
+ StyleBox["zero[]",
+  FontFamily->"Courier New"],
+ " functions)"
+}], "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"MossData", " ", "=", " ", 
+  RowBox[{"{", "}"}]}]], "Input",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"LastData", "=", 
+  RowBox[{"{", "}"}], "   ", 
+  StyleBox[
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "The", " ", "last", " ", "entry", " ", "made", " ", "in", " ", 
+     "MossData"}], " ", "*)"}],
+   FontColor->RGBColor[1, 0, 0]]}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["dist",
+  FontFamily->"Courier New",
+  FontColor->RGBColor[0, 0, 1]],
+ " : The distance the absorber travels (mm).\n",
+ StyleBox["Change this value using ",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]],
+ StyleBox["SetDist[ ]",
+  FontColor->RGBColor[1, 0, 0]],
+ StyleBox[":",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]]
+}], "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.480086956296875*^9, 3.480086970515625*^9}}],
+
+Cell[BoxData[
+ RowBox[{"dist", "=", 
+  RowBox[{"Abs", "[", "\[IndentingNewLine]", 
+   RowBox[{"31.5", "       ", 
+    StyleBox[
+     RowBox[{"(*", " ", 
+      RowBox[{"First", " ", "limit", " ", "of", " ", "travel", " ", 
+       RowBox[{"(", "mm", ")"}]}], " ", "*)"}],
+     FontColor->RGBColor[1, 0, 0]], "\[IndentingNewLine]", "-", 
+    "\[IndentingNewLine]", "8.0"}], "       ", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{"Other", " ", "limit", " ", "of", " ", "travel", " ", 
+      RowBox[{"(", "mm", ")"}]}], " ", "*)"}],
+    FontColor->RGBColor[1, 0, 0]], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The Data Entry Functions", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "This function is called by ",
+ StyleBox["fwd[]",
+  FontFamily->"Courier New"],
+ " and ",
+ StyleBox["bkwd[]",
+  FontFamily->"Courier New"],
+ " to maintain CurveFit's data arrays"
+}], "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ToCurvefitData", "[", "values_", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", "i", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"(*", " ", 
+     RowBox[{"n", ",", " ", "xx", ",", " ", "yy", ",", " ", "sy", ",", " ", 
+      RowBox[{"sx", " ", "are", " ", "Curvefit", " ", "variables"}]}], " ", 
+     "*)"}], "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"n", "=", 
+      RowBox[{"Length", "[", "values", "]"}]}], ";", 
+     RowBox[{"xx", "=", 
+      RowBox[{"{", "}"}]}], ";", 
+     RowBox[{"yy", "=", 
+      RowBox[{"{", "}"}]}], ";", 
+     RowBox[{"sy", "=", 
+      RowBox[{"{", "}"}]}], ";", 
+     RowBox[{"sx", "=", 
+      RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"For", "[", 
+      RowBox[{
+       RowBox[{"i", "=", "1"}], ",", 
+       RowBox[{"i", "\[LessEqual]", "n"}], ",", 
+       RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"xx", "=", 
+         RowBox[{"Append", "[", 
+          RowBox[{"xx", ",", 
+           RowBox[{"values", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "1"}], "]"}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"yy", "=", 
+         RowBox[{"Append", "[", 
+          RowBox[{"yy", ",", 
+           RowBox[{"values", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "2"}], "]"}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"sy", "=", 
+         RowBox[{"Append", "[", 
+          RowBox[{"sy", ",", 
+           RowBox[{"values", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "3"}], "]"}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"sx", "=", 
+         RowBox[{"Append", "[", 
+          RowBox[{"sx", ",", "0"}], "]"}]}], ";"}]}], "\[IndentingNewLine]", 
+      "]"}]}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["fwd[]",
+  FontFamily->"Courier New",
+  FontColor->RGBColor[0, 0, 1]],
+ " : ",
+ StyleBox["Call this function to add a data value for the forward (plus) \
+direction of the absorber",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]],
+ ":"
+}], "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"fwd", "[", 
+   RowBox[{"counts_", " ", ",", " ", "time_"}], " ", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{
+      RowBox[{"Total", " ", "counts"}], ",", " ", 
+      RowBox[{"Time", " ", 
+       RowBox[{"(", "sec", ")"}]}]}], " ", "*)"}],
+    FontColor->RGBColor[1, 0, 0]], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"datum", "=", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"dist", "/", 
+         RowBox[{"Abs", "[", "time", "]"}]}], ",", 
+        RowBox[{"Abs", "[", 
+         RowBox[{"counts", "/", "time"}], "]"}], ",", 
+        RowBox[{"Abs", "[", 
+         RowBox[{
+          RowBox[{"Sqrt", "[", 
+           RowBox[{"Abs", "[", "counts", "]"}], "]"}], "/", "time"}], "]"}], 
+        ",", " ", 
+        RowBox[{"Abs", "[", "counts", "]"}], ",", " ", 
+        RowBox[{"Abs", "[", "time", "]"}]}], "}"}]}], "\[IndentingNewLine]", 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"LastData", "=", "datum"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"MossData", "=", 
+      RowBox[{"Union", "[", 
+       RowBox[{"MossData", ",", 
+        RowBox[{"{", "datum", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ToCurvefitData", "[", "MossData", "]"}], ";", 
+     "\[IndentingNewLine]", "alldata"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.416745264109375*^9, 3.416745274109375*^9}, {
+  3.480087813140625*^9, 3.480087832078125*^9}, {3.480087996796875*^9, 
+  3.48008799965625*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["bkwd[]",
+  FontFamily->"Courier New",
+  FontColor->RGBColor[0, 0, 1]],
+ " : ",
+ StyleBox["Call this function to add a data value for the backward (minus) \
+direction of the absorber",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]],
+ ":"
+}], "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"bkwd", "[", 
+   RowBox[{"counts_", " ", ",", " ", "time_"}], " ", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{
+      RowBox[{"Total", " ", "counts"}], ",", " ", 
+      RowBox[{"Time", " ", 
+       RowBox[{"(", "sec", ")"}]}]}], " ", "*)"}],
+    FontColor->RGBColor[1, 0, 0]], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"datum", "=", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"-", " ", "dist"}], "/", 
+         RowBox[{"Abs", "[", "time", "]"}]}], ",", 
+        RowBox[{"Abs", "[", 
+         RowBox[{"counts", "/", "time"}], "]"}], ",", 
+        RowBox[{"Abs", "[", 
+         RowBox[{
+          RowBox[{"Sqrt", "[", 
+           RowBox[{"Abs", "[", "counts", "]"}], "]"}], "/", "time"}], "]"}], 
+        ",", " ", 
+        RowBox[{"Abs", "[", "counts", "]"}], ",", " ", 
+        RowBox[{"Abs", "[", "time", "]"}]}], "}"}]}], "\[IndentingNewLine]", 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"LastData", "=", "datum"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"MossData", "=", 
+      RowBox[{"Union", "[", 
+       RowBox[{"MossData", ",", 
+        RowBox[{"{", "datum", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ToCurvefitData", "[", "MossData", "]"}], ";", 
+     "\[IndentingNewLine]", "alldata"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.416745239375*^9, 3.41674525540625*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["zero[]",
+  FontFamily->"Courier New",
+  FontColor->RGBColor[0, 0, 1]],
+ " : ",
+ StyleBox["Call this function to add a data value for a zero-velocity data \
+point",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]],
+ ":"
+}], "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"zero", "[", 
+   RowBox[{"counts_", " ", ",", " ", "time_"}], " ", 
+   StyleBox[
+    RowBox[{"(*", " ", 
+     RowBox[{
+      RowBox[{"Total", " ", "counts"}], ",", " ", 
+      RowBox[{"Time", " ", 
+       RowBox[{"(", "sec", ")"}]}]}], " ", "*)"}],
+    FontColor->RGBColor[1, 0, 0]], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"Module", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"datum", "=", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"0.0", ",", 
+        RowBox[{"Abs", "[", 
+         RowBox[{"counts", "/", "time"}], "]"}], ",", 
+        RowBox[{"Abs", "[", 
+         RowBox[{
+          RowBox[{"Sqrt", "[", 
+           RowBox[{"Abs", "[", "counts", "]"}], "]"}], "/", "time"}], "]"}], 
+        ",", " ", 
+        RowBox[{"Abs", "[", "counts", "]"}], ",", " ", 
+        RowBox[{"Abs", "[", "time", "]"}]}], "}"}]}], "\[IndentingNewLine]", 
+     "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"LastData", "=", "datum"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"MossData", "=", 
+      RowBox[{"Union", "[", 
+       RowBox[{"MossData", ",", 
+        RowBox[{"{", "datum", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ToCurvefitData", "[", "MossData", "]"}], ";", 
+     "\[IndentingNewLine]", "alldata"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.41674522046875*^9, 3.4167452321875*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["SetDist[]",
+  FontFamily->"Courier New",
+  FontColor->RGBColor[0, 0, 1]],
+ " : ",
+ StyleBox["Call this function to change the distance value and correctly \
+update MossData and CurveFit",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]],
+ ":"
+}], "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.4800868431875*^9, 3.480086880359375*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetDist", "[", "d_", "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"d", ">", "0"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "i", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"For", "[", 
+        RowBox[{
+         RowBox[{"i", "=", "1"}], ",", 
+         RowBox[{"i", "\[LessEqual]", 
+          RowBox[{"Length", "[", "MossData", "]"}]}], ",", 
+         RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"MossData", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "*=", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"1.0", " ", 
+              RowBox[{"d", "/", "dist"}]}], ",", "1", ",", "1", ",", "1", ",",
+              "1"}], "}"}]}], ";"}]}], "\[IndentingNewLine]", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"ToCurvefitData", "[", "MossData", "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "LastData", "]"}], ">", "0"}], ",", 
+         RowBox[{"LastData", " ", "*=", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"1.0", " ", 
+             RowBox[{"d", "/", "dist"}]}], ",", "1", ",", "1", ",", "1", ",", 
+            "1"}], "}"}]}]}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"dist", " ", "=", "d"}]}]}], "]"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+    "Print", "[", "\"\<Set the distance to a positive value!\>\"", "]"}], ",",
+     "\[IndentingNewLine]", 
+    RowBox[{
+    "Print", "[", "\"\<Set the distance to a positive value!\>\"", "]"}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.48008630853125*^9, 3.48008633403125*^9}, {
+  3.4800864215*^9, 3.480086559390625*^9}, {3.48008669765625*^9, 
+  3.48008679103125*^9}, {3.48008689184375*^9, 3.480086903828125*^9}, {
+  3.480087001828125*^9, 3.480087018375*^9}, {3.4800872031875*^9, 
+  3.480087222671875*^9}, {3.480087281640625*^9, 3.48008741725*^9}, {
+  3.480088008828125*^9, 3.480088025703125*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["MossData Data Manipulation/Editing Functions", "Section",
+ InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["alldata",
+  FontFamily->"Courier New",
+  FontColor->RGBColor[0, 0, 1]],
+ " : ",
+ StyleBox["Return MossData in TableForm format, with headings",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]]
+}], "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{"alldata", ":=", " ", 
+  RowBox[{"TableForm", "[", "\[IndentingNewLine]", 
+   RowBox[{"Join", "[", 
+    RowBox[{
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<V (mm/sec)\>\"", ",", "\"\<Rate (1/sec)\>\"", ",", 
+         "\"\<sigma (1/sec)\>\"", ",", "\"\<Counts\>\"", ",", 
+         "\"\<Time (sec)\>\""}], "}"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<----------\>\"", ",", "\"\<------------\>\"", ",", 
+         "\"\<-------------\>\"", ",", "\"\<------\>\"", ",", 
+         "\"\<----------\>\""}], "}"}]}], "\[IndentingNewLine]", "}"}], ",", 
+     "MossData"}], "]"}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["entry[]",
+  FontFamily->"Courier New",
+  FontColor->RGBColor[0, 0, 1]],
+ " : ",
+ StyleBox["Find a data entry with the given counts and time",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]]
+}], "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"entry", "[", 
+    RowBox[{"counts_", " ", ",", " ", "time_"}], " ", 
+    StyleBox[
+     RowBox[{"(*", " ", 
+      RowBox[{
+       RowBox[{"Total", " ", "counts"}], ",", " ", 
+       RowBox[{"Time", " ", 
+        RowBox[{"(", "sec", ")"}]}]}], " ", "*)"}],
+     FontColor->RGBColor[1, 0, 0]], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"data", "=", 
+       RowBox[{"Select", "[", 
+        RowBox[{"MossData", ",", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"#1", "[", 
+              RowBox[{"[", "4", "]"}], "]"}], "\[Equal]", 
+             RowBox[{"Abs", "[", "counts", "]"}]}], " ", "&&", " ", 
+            RowBox[{
+             RowBox[{"#1", "[", 
+              RowBox[{"[", "5", "]"}], "]"}], "\[Equal]", 
+             RowBox[{"Abs", "[", "time", "]"}]}]}], "&"}], ")"}], ",", "1"}], 
+        "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Length", "[", "data", "]"}], ">", "0"}], ",", 
+       RowBox[{"data", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], ",", 
+       RowBox[{"{", "}"}]}], "]"}]}], "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.416745186734375*^9, 3.416745200890625*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ StyleBox["rmdata[element]",
+  FontFamily->"Courier New",
+  FontColor->RGBColor[0, 0, 1]],
+ " : ",
+ StyleBox["Remove the provided element from MossData",
+  FontSlant->"Italic",
+  FontColor->RGBColor[1, 0, 0]]
+}], "Subsection",
+ InitializationCell->True],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"rmdata", "[", "element_", " ", 
+    StyleBox[
+     RowBox[{"(*", " ", 
+      RowBox[{"element", " ", "to", " ", "be", " ", "removed"}], " ", "*)"}],
+     FontColor->RGBColor[1, 0, 0]], "]"}], ":=", "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"MossData", "=", 
+       RowBox[{"Complement", "[", 
+        RowBox[{"MossData", ",", " ", 
+         RowBox[{"{", "element", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"ToCurvefitData", "[", "MossData", "]"}], ";", 
+      "\[IndentingNewLine]", "alldata"}]}], "\[IndentingNewLine]", "]"}]}], 
+  "\[IndentingNewLine]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.41674514496875*^9, 3.416745194890625*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Summary of the defined variables and functions:",
+ FontSize->18,
+ FontSlant->"Italic"]], "Subsubtitle",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ FontWeight->"Bold"],
+
+Cell[TextData[{
+ StyleBox["MossData",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ " : \nglobal list variable; maintained by the functions ",
+ StyleBox["fwd[]",
+  FontFamily->"Courier New"],
+ ", ",
+ StyleBox["bkwd[]",
+  FontFamily->"Courier New"],
+ ", ",
+ StyleBox["zero[], ",
+  FontFamily->"Courier New"],
+ "and ",
+ StyleBox["SetDist[]",
+  FontFamily->"Courier New"],
+ ".\nThe elements of ",
+ StyleBox["MossData",
+  FontFamily->"Courier New"],
+ " are lists of the form:\n",
+ StyleBox["{speed ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(mm/sec)",
+  FontSize->14],
+ StyleBox[", rate ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(counts/sec)",
+  FontSize->14],
+ StyleBox[", sigma ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(counts/sec)",
+  FontSize->14],
+ StyleBox[", counts, time ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(sec)",
+  FontSize->14],
+ StyleBox["}",
+  FontFamily->"Courier New",
+  FontSize->14]
+}], "Text",
+ CellChangeTimes->{{3.480087049515625*^9, 3.480087075421875*^9}}],
+
+Cell[BoxData[""], "Input"],
+
+Cell[TextData[{
+ StyleBox["SetDist[distance ",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["(mm)",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["]",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ " :\nfunction; sets or changes the distance the absorber travels. Updates \
+both ",
+ StyleBox["MossData",
+  FontFamily->"Courier New"],
+ " and the CurveFit data sets."
+}], "Text",
+ CellChangeTimes->{{3.480087096953125*^9, 3.480087171328125*^9}}],
+
+Cell[TextData[{
+ StyleBox["fwd[counts, time ",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["(sec)",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["]",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ " :\nfunction; adds a data point for travel in the forward (+) direction. \
+Updates both ",
+ StyleBox["MossData",
+  FontFamily->"Courier New"],
+ " and the CurveFit data sets."
+}], "Text"],
+
+Cell[TextData[{
+ StyleBox["bkwd[counts, time ",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["(sec)",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["]",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ " :\nfunction; adds a data point for travel in the backward (-) direction. \
+Updates both ",
+ StyleBox["MossData",
+  FontFamily->"Courier New"],
+ " and the CurveFit data sets."
+}], "Text"],
+
+Cell[TextData[{
+ StyleBox["zero[counts, time ",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["(sec)",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["]",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ " :\nfunction; adds a zero-velocity data point. Updates both ",
+ StyleBox["MossData",
+  FontFamily->"Courier New"],
+ " and the CurveFit data sets."
+}], "Text"],
+
+Cell[BoxData[""], "Input"],
+
+Cell[TextData[{
+ StyleBox["LastData",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ " : \nglobal variable; contains the last data element inserted into ",
+ StyleBox["MossData",
+  FontFamily->"Courier New"],
+ " by one of the functions ",
+ StyleBox["fwd[]",
+  FontFamily->"Courier New"],
+ ", ",
+ StyleBox["bkwd[]",
+  FontFamily->"Courier New"],
+ ", and ",
+ StyleBox["zero[]",
+  FontFamily->"Courier New"],
+ ". LastData is a list of the form:\n",
+ StyleBox["{speed ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(mm/sec)",
+  FontSize->14],
+ StyleBox[", rate ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(counts/sec)",
+  FontSize->14],
+ StyleBox[", sigma ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(counts/sec)",
+  FontSize->14],
+ StyleBox[", counts, time ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(sec)",
+  FontSize->14],
+ StyleBox["}",
+  FontFamily->"Courier New",
+  FontSize->14]
+}], "Text"],
+
+Cell[TextData[{
+ StyleBox["alldata",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ " : \nthis \"function\" takes no arguments; executing ",
+ StyleBox["alldata",
+  FontFamily->"Courier New"],
+ " returns the contents of ",
+ StyleBox["MossData",
+  FontFamily->"Courier New"],
+ " as a table with headings."
+}], "Text"],
+
+Cell[TextData[{
+ StyleBox["entry[counts, time ",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["(sec)",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ StyleBox["]",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ " :\nfunction; finds an entry (element) in ",
+ StyleBox["MossData",
+  FontFamily->"Courier New"],
+ " with the specified counts and time, if it exists. The returned value is a \
+list of the form (a null list is returned if no entry could be found):\n",
+ StyleBox["{speed ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(mm/sec)",
+  FontSize->14],
+ StyleBox[", rate ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(counts/sec)",
+  FontSize->14],
+ StyleBox[", sigma ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(counts/sec)",
+  FontSize->14],
+ StyleBox[", counts, time ",
+  FontFamily->"Courier New",
+  FontSize->14],
+ StyleBox["(sec)",
+  FontSize->14],
+ StyleBox["}",
+  FontFamily->"Courier New",
+  FontSize->14]
+}], "Text"],
+
+Cell[TextData[{
+ StyleBox["rmdata[entry]",
+  FontFamily->"Courier New",
+  FontSize->16,
+  FontColor->RGBColor[0, 0, 1]],
+ " :\nfunction; removes the specified entry (element) from ",
+ StyleBox["MossData",
+  FontFamily->"Courier New"],
+ " and the CurveFit data sets. the specified entry should be a list as \
+returned by ",
+ StyleBox["entry[]",
+  FontFamily->"Courier New"],
+ " or ",
+ StyleBox["LastData",
+  FontFamily->"Courier New"],
+ "."
+}], "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Here Are a Couple of Calls to the data entry \
+functions. You should replace these lines with your own commands to enter the \
+data you take.",
+ FontSize->18,
+ FontSlant->"Italic"]], "Subsubtitle",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ FontWeight->"Bold"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Empty", " ", "the", " ", "Mossbauer", " ", "data", " ", "set"}], 
+   " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"MossData", " ", "=", " ", 
+   RowBox[{"{", "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.4800874685*^9, 3.48008746975*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Set", " ", "or", " ", "change", " ", "the", " ", "distance", " ", "the", 
+    " ", "absorber", " ", "travels", " ", 
+    RowBox[{"(", 
+     RowBox[{"in", " ", "mm"}], ")"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"SetDist", "[", 
+   RowBox[{"31.5", "-", "8.0"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.48008744740625*^9, 3.480087496390625*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Add", " ", "a", " ", "forward", " ", "measurement"}], " ", "*)"}],
+   "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"fwd", "[", 
+    RowBox[{"38529", ",", "141.000"}], "]"}], ";"}]}]], "Input",
+ CellChangeTimes->{{3.4800875188125*^9, 3.480087521890625*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Add", " ", "a", " ", "backward", " ", "measurement"}], " ", 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"bkwd", "[", 
+    RowBox[{"36976", ",", "140.696"}], "]"}], ";"}]}]], "Input",
+ CellChangeTimes->{{3.480087524609375*^9, 3.480087532421875*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Display", " ", "the", " ", "data", " ", "so", " ", "far"}], " ", 
+   "*)"}], "\[IndentingNewLine]", "alldata"}]], "Input",
+ CellChangeTimes->{{3.480087543015625*^9, 3.4800875443125*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"Here", "'"}], "s", " ", "the", " ", "last", " ", "data", " ", 
+    "entry", " ", "made"}], " ", "*)"}], "\[IndentingNewLine]", 
+  "LastData"}]], "Input",
+ CellChangeTimes->{{3.480087554203125*^9, 3.48008755528125*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Here", "'"}], "s", " ", "how", " ", "to", " ", "remove", " ", 
+     "data", " ", "points"}], ",", " ", 
+    RowBox[{
+    "in", " ", "case", " ", "you", " ", "make", " ", "a", " ", "mistake"}]}], 
+   " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"rmdata", "[", "LastData", "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", "or", " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"rmdata", "[", 
+     RowBox[{"entry", "[", 
+      RowBox[{"38529", ",", "141"}], "]"}], "]"}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.480087573671875*^9, 3.480087630265625*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Now", " ", "there", " ", "should", " ", "be", " ", "no", " ", "remaining",
+     " ", "data"}], " ", "*)"}], "\[IndentingNewLine]", "alldata"}]], "Input",
+ CellChangeTimes->{{3.4800876208125*^9, 3.480087623*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["You can enter your own data and commands following \
+this line.",
+ FontSize->18,
+ FontSlant->"Italic"]], "Subsubtitle",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.41674539303125*^9, 3.41674541621875*^9}},
+ FontWeight->"Bold"],
+
+Cell[BoxData[
+ RowBox[{"(*", " ", 
+  RowBox[{"Your", " ", "commands"}], " ", "*)"}]], "Input",
+ CellChangeTimes->{{3.4167454281875*^9, 3.416745431046875*^9}},
+ FontColor->RGBColor[1, 0, 0]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->None,
+Saveable->False,
+InitializationCellEvaluation->True,
+WindowSize->{605, 600},
+WindowMargins->{{71, Automatic}, {Automatic, -2}},
+PrintingCopies->1,
+PrintingPageRange->{Automatic, Automatic},
+ShowCellLabel->False,
+FrontEndVersion->"7.0 for Microsoft Windows (32-bit) (February 18, 2009)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 90, 2, 77, "Subtitle"],
+Cell[CellGroupData[{
+Cell[682, 28, 200, 6, 97, "Section"],
+Cell[885, 36, 119, 3, 31, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1041, 44, 190, 6, 53, "Subsubtitle",
+ InitializationCell->True],
+Cell[1234, 52, 252, 6, 31, "Input",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1511, 62, 61, 1, 71, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[1597, 67, 464, 14, 106, "Subsection",
+ InitializationCell->True],
+Cell[2064, 83, 111, 3, 31, "Input",
+ InitializationCell->True],
+Cell[2178, 88, 291, 9, 31, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2506, 102, 476, 15, 54, "Subsection",
+ InitializationCell->True],
+Cell[2985, 119, 638, 15, 112, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3672, 140, 70, 1, 71, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[3767, 145, 240, 9, 54, "Subsection",
+ InitializationCell->True],
+Cell[4010, 156, 1953, 53, 232, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6000, 214, 313, 11, 54, "Subsection",
+ InitializationCell->True],
+Cell[6316, 227, 1629, 41, 232, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7982, 273, 316, 11, 54, "Subsection",
+ InitializationCell->True],
+Cell[8301, 286, 1559, 40, 232, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9897, 331, 296, 11, 54, "Subsection",
+ InitializationCell->True],
+Cell[10196, 344, 1460, 37, 232, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11693, 386, 384, 12, 54, "Subsection",
+ InitializationCell->True],
+Cell[12080, 400, 2170, 51, 252, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14299, 457, 90, 1, 71, "Section",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[14414, 462, 270, 9, 37, "Subsection",
+ InitializationCell->True],
+Cell[14687, 473, 766, 18, 172, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15490, 496, 268, 9, 37, "Subsection",
+ InitializationCell->True],
+Cell[15761, 507, 1389, 39, 152, "Input",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17187, 551, 269, 9, 37, "Subsection",
+ InitializationCell->True],
+Cell[17459, 562, 830, 20, 152, "Input",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18350, 589, 180, 4, 39, "Subsubtitle"],
+Cell[18533, 595, 1084, 45, 108, "Text"],
+Cell[19620, 642, 26, 0, 31, "Input"],
+Cell[19649, 644, 531, 18, 69, "Text"],
+Cell[20183, 664, 474, 17, 69, "Text"],
+Cell[20660, 683, 476, 17, 69, "Text"],
+Cell[21139, 702, 447, 16, 51, "Text"],
+Cell[21589, 720, 26, 0, 31, "Input"],
+Cell[21618, 722, 986, 41, 108, "Text"],
+Cell[22607, 765, 347, 12, 68, "Text"],
+Cell[22957, 779, 1050, 40, 109, "Text"],
+Cell[24010, 821, 451, 16, 68, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24498, 842, 274, 6, 83, "Subsubtitle"],
+Cell[24775, 850, 295, 7, 52, "Input"],
+Cell[25073, 859, 418, 10, 52, "Input"],
+Cell[25494, 871, 315, 8, 52, "Input"],
+Cell[25812, 881, 320, 8, 52, "Input"],
+Cell[26135, 891, 244, 5, 52, "Input"],
+Cell[26382, 898, 289, 7, 52, "Input"],
+Cell[26674, 907, 691, 18, 92, "Input"],
+Cell[27368, 927, 273, 6, 52, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[27678, 938, 260, 6, 61, "Subsubtitle"],
+Cell[27941, 946, 189, 4, 31, "Input"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

@@ -1,0 +1,505 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 6.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     19100,        497]
+NotebookOptionsPosition[     15984,        422]
+NotebookOutlinePosition[     16643,        447]
+CellTagsIndexPosition[     16558,        442]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Magnetic Field Calculator
+for Stern-Gerlach\
+\>", "Subtitle",
+ CellChangeTimes->{{3.448309521591875*^9, 
+  3.448309559779375*^9}},ExpressionUUID->"679695b9-3190-4b75-bf63-\
+9a4328d45680"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Button", "[", 
+  RowBox[{"\"\<Open Field Calculator\>\"", ",", "MagnetDialog"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.448311174091875*^9, 3.44831121892*^9}, {
+  3.449239083765625*^9, 
+  3.449239084796875*^9}},ExpressionUUID->"6f874be4-c8ce-46e3-80f6-\
+948291f24e69"],
+
+Cell[BoxData[
+ ButtonBox["\<\"Open Field Calculator\"\>",
+  Appearance->{Automatic, "DialogBox", "Normal", Automatic},
+  ButtonFunction:>$CellContext`MagnetDialog,
+  Evaluator->Automatic,
+  Method->"Preemptive"]], "Output",
+ CellChangeTimes->{3.448311999873125*^9, 
+  3.44923908653125*^9},ExpressionUUID->"9d284fd6-c599-4340-a9ad-579ff5e2466f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "B"}]], "Input",
+ CellChangeTimes->{{3.449239387015625*^9, 
+  3.449239388484375*^9}},ExpressionUUID->"1c4f050f-ecc6-4c9d-a25c-\
+c93167a7c21b"],
+
+Cell[BoxData[
+ StyleBox["\<\"B[I] calculates the magnetic field (in Tesla) for magnet \
+current I (amps).\"\>", "MSG"]], "Print", "PrintUsage",
+ CellChangeTimes->{3.449239389578125*^9},
+ CellTags->
+  "Info3449214189-8049361",ExpressionUUID->"6307a434-721c-4233-a679-\
+cf1c6f01105f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["Bplot"], "Input",
+ CellChangeTimes->{{3.44831191232625*^9, 
+  3.448311913091875*^9}},ExpressionUUID->"d80401e7-62cd-4fda-af49-\
+6c651e73ecc9"],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {}, 
+   {Hue[0.67, 0.6, 0.6], Thickness[Large], LineBox[CompressedData["
+1:eJwVx3s403scwPG5bew8ohNOuT2K7ZB6UE6ow+fnURwVJvdNyyVCkmd0YVqO
+az1tCkdxHOSUJN1JRDQ9zFJOhZzlVos0l9n2WxfEzvf88X7ez2t91NF9MeoE
+AsEX9f+/7UmqoB1NdmvfRjogTm+EvIM/W/9D9QWHP2GT/FEjvJBOJPCoTFCY
+1+GqxUaQNXhwE6lJ8On4QJgZ+wFkGeGm4VQO+D2TvgtmN0GvYPdkALUAmvfu
+6upgN8PRy8eFftRKWLXZALCMNuBzua0+1NsQEkVkMlw7QYvIIkkSOqBmJ6WA
+PPIMvE9H5j4IFsAE7RKBd+gVPEyLGa151Qehwg7mrh2DIKIftmOd6IeM5yWu
+h7xEsNqLF8vHhuCJpmzIdn4E9Adi7jsxhiH/J5rJeuY7sLRIrMuNGgee9fWA
+bEsxOI8e6XUveg8sOmcWv/cB+IuZewfKP8BApXcpxWsS4jp6etqzJoHcnEuz
+rPsIZdG1xoYRUzDeOhy9WzoFm0Pff1mJkYD7i9slRU4SGMP9+jDvGSgnxrne
+CpoGxfg6e6OgOQhycqsSHpuBC/Xph0JC5uHioGl+LHsWqHraPifLZTDRIz3N
+3D8HTcmZ9QVVckj9fWeLFKQwQCkm+RcpwKzh8TZzjXmwyu633l+Gw/mllFSz
+7nlwoY07VpUrwZnhMaa3QwajybluPO5n6LIvfdqfJ4P7LmG6XYVfIGXtl9Kb
+r2VgFCwQXc/9CmRDRxNLAzmAmFDYmfoN+A4vL7/yk0OZUZwu9eQCFL6+8JnA
+lUNWZXz+LwmLEJnSrLP9iRwq+kq7C5KX4Fif/W+flHI4lVQsM2N9B8sexxIy
+RQEzkdZrw6KWwTDn85Y1fgo4tzytORa7AhXRf0im0hTwaNZrfhVdBZOmgu6r
+VQp4Q3EWb7ciYAHROtpvOxUQZxNtV1xDwLRvFJjvmVIAP5jBdjdXw5KIopG7
+JBy2hk7XGVSrYelOFhHGNjgkZnsOuZqoY/SGXwltnjicidVeVCtWx0Ych5lh
+UTg8NotUTRtoYOzAs6OtHBxaVvI0NhZoYPwtV0TCSzj0NXhM81ZrYvW1//bG
+38OhyyK2m1ukibVl6qYbC3HIeRhU/Z6shbmf+mvrD2M4hG8YYTJ4WpiODvPN
+DRyHpSY7E1sSEStvFlSokZSQoSF5XsIhYkSdjFMB65RgZOUSSSGQsCkbMb1u
+kxJOJAUryWkkbK7dzCXcTQlyLjnB8DsJ65yoTqf7K8E0x92AgvzhrKA9HNmL
+fbLdEbnYZk79AHJF/McfA5GXQp3PRSN7e3a2FiHT0vvKE5GrVWm6+ssk7PDb
+hTYOsj9Lcpe8QsLW1vuo/kbOiLdgGCMvPWd51CDXRoRobUR2mL2UX4u87NsV
+5o08t0GsdxO5zrZa/QzymtTjFg+Q1SZDA7VUJOxIc6W7AHnTyPkVA2RRy9Nc
+IXJIf/d1K+SFlk/CXuRbfMdlD+Q7TVv2vUQOq9S/loXMuNodJULOKfGiFSEP
+VsxcG0a+w+UsViM3XtSfGUXWYs/68pEX8+gpYmR7luXCS2Qe5/TDCWRGPP3K
+O+SxY1eXPiLnRRT6yJA1jghBgnwvpOerCnn1QWn2DPJ/kCRhfg==
+     "]]}},
+  AspectRatio->1,
+  Axes->True,
+  AxesOrigin->{0, 0},
+  Frame->True,
+  FrameLabel->{
+    FormBox[
+     StyleBox["\"I (amps)\"", Larger, Italic, StripOnInput -> False], 
+     TraditionalForm], 
+    FormBox[
+     StyleBox[
+     "\"B (Tesla, \[PlusMinus]10%)\"", Larger, Italic, StripOnInput -> False],
+      TraditionalForm]},
+  GridLines->Automatic,
+  GridLinesStyle->GrayLevel[0.85],
+  ImageSize->450,
+  PlotLabel->FormBox[
+    StyleBox["\"Magnet Calibration\"", Larger, StripOnInput -> False], 
+    TraditionalForm],
+  PlotRange->{{0, 3}, {0., 1.2699999955714285`}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Output",
+ CellChangeTimes->{
+  3.448312000091875*^9, {3.449236052953125*^9, 
+   3.449236066625*^9}},ExpressionUUID->"48fead81-e73f-41eb-87bd-90d82e39f762"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Initialization Code", "Section",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448311437748125*^9, 
+  3.448311444466875*^9}},ExpressionUUID->"101557e8-f84b-4def-aa12-\
+5188ee0f464e"],
+
+Cell[CellGroupData[{
+
+Cell["This data comes from the original chart", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44830956688875*^9, 
+  3.448309577748125*^9}},ExpressionUUID->"b8036e0b-4b07-4af0-a289-\
+ab4bc7e25724"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"data", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0.08"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0.5", ",", "0.575"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1.", ",", "0.9"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1.5", ",", "1.075"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2.", ",", "1.17"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2.5", ",", "1.23"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"3.", ",", "1.27"}], "}"}]}], "}"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448309221373125*^9, 3.4483092561075*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"ba957828-7cee-4195-8628-f2b5dcf9c4e5"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Fit a cubic spline to the data", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44830958895125*^9, 
+  3.448309604529375*^9}},ExpressionUUID->"53ceef6f-cd6a-4752-b6b5-\
+7ad88a07f83c"],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<Splines`\>\"", "]"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44830928132625*^9, 3.44830928845125*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"2a51c894-37b5-456d-b5be-101aba4f9302"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"spline", "=", 
+   RowBox[{"SplineFit", "[", 
+    RowBox[{"data", ",", "Cubic"}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448307656560625*^9, 3.44830769420125*^9}, {
+  3.44830929951375*^9, 3.448309314295*^9}, {3.448311538341875*^9, 
+  3.448311539435625*^9}},
+ CellLabel->"In[3]:=",ExpressionUUID->"ca777349-0070-48d2-a1c0-3482ea742d90"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Define a function which, given I, calculates B", "Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.44830961701375*^9, 
+  3.4483096354825*^9}},ExpressionUUID->"e371184d-1eed-420f-a787-d059a122c38c"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"B", "[", 
+   RowBox[{"x_", "?", "NumberQ"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"spline", "[", 
+     RowBox[{"2", " ", "x"}], "]"}], "[", 
+    RowBox[{"[", "2", "]"}], "]"}], "/;", 
+   RowBox[{
+    RowBox[{"0", "\[LessEqual]", "x"}], "&&", 
+    RowBox[{"x", "\[LessEqual]", "3"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"B", "::", "usage"}], "=", 
+  "\"\<B[I] calculates the magnetic field (in Tesla) for magnet current I \
+(amps).\>\""}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448308441154375*^9, 3.448308469623125*^9}, {
+   3.448308502545*^9, 3.448308504873125*^9}, {3.448308579716875*^9, 
+   3.44830858092*^9}, {3.448308611185625*^9, 3.44830861376375*^9}, {
+   3.448309335279375*^9, 3.4483093367325*^9}, {3.448309367185625*^9, 
+   3.448309414029375*^9}, {3.4492392843125*^9, 3.449239375140625*^9}, 
+   3.44924518090625*^9},
+ CellLabel->"In[4]:=",ExpressionUUID->"00d452be-01c4-4ae8-b925-baadeb0c6c72"],
+
+Cell[BoxData["\<\"B[I] calculates the magnetic field (in Tesla) for magnet \
+current I (amps).\"\>"], "Output",
+ CellChangeTimes->{{3.449245187515625*^9, 3.4492452146875*^9}, 
+   3.44924974484375*^9, 3.449315336518875*^9, 3.7330699874675007`*^9},
+ CellLabel->"Out[5]=",ExpressionUUID->"75f5ee5e-e0fa-46b6-ac9f-46f98aceea1a"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Bplot", "=", 
+   RowBox[{"Plot", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"B", "[", "x", "]"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"x", ",", "0", ",", "3"}], "}"}], ",", 
+     RowBox[{"AspectRatio", "\[Rule]", "1"}], ",", 
+     RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+     RowBox[{"PlotLabel", "\[Rule]", 
+      RowBox[{"Style", "[", 
+       RowBox[{"\"\<Magnet Calibration\>\"", ",", "Larger"}], "]"}]}], ",", 
+     RowBox[{"GridLines", "\[Rule]", "Automatic"}], ",", 
+     RowBox[{"GridLinesStyle", "\[Rule]", 
+      RowBox[{"GrayLevel", "[", ".85", "]"}]}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", "Thick"}], ",", 
+     RowBox[{"FrameLabel", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Style", "[", 
+         RowBox[{"\"\<I (amps)\>\"", ",", "Larger", ",", "Italic"}], "]"}], 
+        ",", 
+        RowBox[{"Style", "[", 
+         RowBox[{
+         "\"\<B (Tesla, \[PlusMinus]10%)\>\"", ",", "Larger", ",", "Italic"}],
+          "]"}]}], "}"}]}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", "450"}]}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448308192779375*^9, 3.448308296295*^9}, {
+  3.448308475966875*^9, 3.44830847663875*^9}, {3.448308686045*^9, 
+  3.448308776795*^9}, {3.44830945392*^9, 3.448309459591875*^9}, {
+  3.448309655966875*^9, 3.448309660748125*^9}, {3.448311314248125*^9, 
+  3.44831139767*^9}, {3.4483115842325*^9, 3.448311901623125*^9}, {
+  3.44923603884375*^9, 
+  3.44923605978125*^9}},ExpressionUUID->"d5a4040d-a38d-426e-a36f-\
+32067e757b76"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Here is a dynamic calculator of B vs. I in a dialog window", \
+"Subsection",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448309686091875*^9, 3.448309702404375*^9}, {
+  3.448311263216875*^9, 
+  3.448311269966875*^9}},ExpressionUUID->"47626a73-1b96-45ed-bb3f-\
+559067acf6af"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MagnetFieldNotebook", "=", 
+   RowBox[{"Notebook", "[", 
+    RowBox[{"{", "}"}], "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{
+  3.448311070654375*^9},ExpressionUUID->"c18d5521-5807-4671-9562-\
+addf975ac629"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"MagnetDialog", " ", ":=", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"MagnetFieldNotebook", "===", 
+      RowBox[{"Notebook", "[", 
+       RowBox[{"{", "}"}], "]"}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"MagnetFieldNotebook", "=", 
+       RowBox[{"CreateDialog", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"Block", "[", 
+             RowBox[{
+              RowBox[{"{", "b", "}"}], ",", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"b", "=", 
+                RowBox[{"B", "[", "x", "]"}]}], ";", "\[IndentingNewLine]", 
+               RowBox[{"Grid", "[", 
+                RowBox[{
+                 RowBox[{"{", "\[IndentingNewLine]", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Tooltip", "[", 
+                    RowBox[{
+                    RowBox[{"Style", "[", 
+                    RowBox[{"\"\<Magnet Field (Tesla): \>\"", ",", 
+                    RowBox[{"FontFamily", "\[Rule]", "\"\<Helvetica\>\""}]}], 
+                    "]"}], ",", 
+                    "\"\<The magnetic field estimate from the calibration \
+data\>\""}], "]"}], ",", 
+                    RowBox[{"Tooltip", "[", 
+                    RowBox[{
+                    RowBox[{"Style", "[", 
+                    RowBox[{
+                    RowBox[{"ToString", "[", " ", 
+                    RowBox[{"Round", "[", 
+                    RowBox[{"b", ",", ".001"}], "]"}], "]"}], ",", 
+                    RowBox[{"FontFamily", "\[Rule]", "\"\<Helvetica\>\""}]}], 
+                    "]"}], ",", 
+                    "\"\<The magnetic field estimate from the calibration \
+data\>\""}], "]"}]}], "}"}], ",", 
+                   RowBox[{"{", "}"}], ",", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Style", "[", 
+                    RowBox[{
+                    "\"\<Calibration has a \[PlusMinus]10% systematic scale \
+uncertainty\>\"", ",", 
+                    RowBox[{"FontFamily", "\[Rule]", "\"\<Helvetica\>\""}]}], 
+                    "]"}], ",", "SpanFromLeft"}], "}"}]}], 
+                  "\[IndentingNewLine]", "}"}], ",", 
+                 RowBox[{"Alignment", "\[Rule]", 
+                  RowBox[{"{", 
+                   RowBox[{"Left", ",", "Baseline"}], "}"}]}]}], "]"}]}]}], 
+             RowBox[{"(*", " ", "Grid", " ", "*)"}], "\[IndentingNewLine]", 
+             "]"}], 
+            RowBox[{"(*", " ", "Block", " ", "*)"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"Style", "[", 
+             RowBox[{"\"\<Enter Magnet Current (Amps):\>\"", ",", "Larger"}], 
+             "]"}], ",", "\"\<\>\"", ",", "\[IndentingNewLine]", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+               "x", ",", "1.0", ",", "\[IndentingNewLine]", 
+                "\"\<Magnet Current (Amps)\>\""}], "}"}], 
+              "\[IndentingNewLine]", ",", 
+              RowBox[{"ControlType", "\[Rule]", "InputField"}]}], "}"}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"AppearanceElements", "\[Rule]", "None"}]}], "]"}], 
+          RowBox[{"(*", " ", "Manipulate", " ", "*)"}], "\[IndentingNewLine]",
+           "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"Magnification", "\[Rule]", "1.5"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"Deployed", "\[Rule]", "True"}], ",", 
+         RowBox[{"ShowCellBracket", "\[Rule]", "False"}], ",", 
+         RowBox[{"Saveable", "\[Rule]", "False"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"WindowSize", "\[Rule]", "All"}], " ", 
+         RowBox[{"(*", 
+          RowBox[{",", 
+           RowBox[{"WindowFrame", "\[Rule]", "\"\<Normal\>\""}], ",", 
+           RowBox[{
+           "WindowElements", "\[Rule]", "\"\<MagnificationPopUp\>\""}]}], " ",
+           "*)"}], ",", 
+         RowBox[{"WindowFloating", "\[Rule]", "False"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{
+         "WindowTitle", "\[Rule]", 
+          "\"\<Magnet Calculator - Physics 7 Stern-Gerlach\>\""}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"NotebookEventActions", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"\"\<WindowClose\>\"", "\[RuleDelayed]", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"MagnetFieldNotebook", "=", 
+               RowBox[{"Notebook", "[", 
+                RowBox[{"{", "}"}], "]"}]}], ";"}], ")"}]}], "}"}]}]}], 
+        "\[IndentingNewLine]", "]"}]}], ";"}], ",", 
+     RowBox[{"SetSelectedNotebook", "[", "MagnetFieldNotebook", "]"}]}], 
+    "]"}]}], ";"}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.448309984591875*^9, 3.44831008807625*^9}, {
+   3.44831013326375*^9, 3.448310357310625*^9}, {3.448310475654375*^9, 
+   3.44831052476375*^9}, {3.44831055826375*^9, 3.44831057632625*^9}, {
+   3.448310676498125*^9, 3.448310692623125*^9}, {3.448310748841875*^9, 
+   3.448310773295*^9}, {3.44831089882625*^9, 3.448310950154375*^9}, {
+   3.448310980748125*^9, 3.44831103620125*^9}, 3.44831112388875*^9, {
+   3.449239103140625*^9, 
+   3.4492391121875*^9}},ExpressionUUID->"e57e3604-1d25-4817-a640-\
+0a7338bd87d7"]
+}, Open  ]]
+}, Closed]]
+}, Open  ]]
+},
+AutoGeneratedPackage->None,
+InitializationCellEvaluation->True,
+InitializationCellWarning->False,
+WindowSize->{849, 1396},
+WindowMargins->{{Automatic, 2}, {Automatic, 20}},
+ShowSelection->True,
+FrontEndVersion->"11.3 for Linux x86 (64-bit) (March 6, 2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Info3449214189-8049361"->{
+  Cell[1641, 59, 282, 6, 42, "Print",ExpressionUUID->"6307a434-721c-4233-a679-cf1c6f01105f",
+   CellTags->"Info3449214189-8049361"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Info3449214189-8049361", 16401, 436}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 197, 6, 87, "Subtitle",ExpressionUUID->"679695b9-3190-4b75-bf63-9a4328d45680"],
+Cell[CellGroupData[{
+Cell[789, 32, 295, 7, 31, "Input",ExpressionUUID->"6f874be4-c8ce-46e3-80f6-948291f24e69"],
+Cell[1087, 41, 344, 7, 42, "Output",ExpressionUUID->"9d284fd6-c599-4340-a9ad-579ff5e2466f"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1468, 53, 170, 4, 31, "Input",ExpressionUUID->"1c4f050f-ecc6-4c9d-a25c-c93167a7c21b"],
+Cell[1641, 59, 282, 6, 42, "Print",ExpressionUUID->"6307a434-721c-4233-a679-cf1c6f01105f",
+ CellTags->"Info3449214189-8049361"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1960, 70, 156, 3, 31, "Input",ExpressionUUID->"d80401e7-62cd-4fda-af49-6c651e73ecc9"],
+Cell[2119, 75, 2571, 56, 482, "Output",ExpressionUUID->"48fead81-e73f-41eb-87bd-90d82e39f762"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4727, 136, 191, 4, 68, "Section",ExpressionUUID->"101557e8-f84b-4def-aa12-5188ee0f464e",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[4943, 144, 213, 4, 36, "Subsection",ExpressionUUID->"b8036e0b-4b07-4af0-a289-ab4bc7e25724",
+ InitializationCell->True],
+Cell[5159, 150, 740, 21, 52, "Input",ExpressionUUID->"ba957828-7cee-4195-8628-f2b5dcf9c4e5",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5936, 176, 204, 4, 36, "Subsection",ExpressionUUID->"53ceef6f-cd6a-4752-b6b5-7ad88a07f83c",
+ InitializationCell->True],
+Cell[6143, 182, 242, 4, 31, "Input",ExpressionUUID->"2a51c894-37b5-456d-b5be-101aba4f9302",
+ InitializationCell->True],
+Cell[6388, 188, 405, 9, 31, "Input",ExpressionUUID->"ca777349-0070-48d2-a1c0-3482ea742d90",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6830, 202, 216, 3, 36, "Subsection",ExpressionUUID->"e371184d-1eed-420f-a787-d059a122c38c",
+ InitializationCell->True],
+Cell[CellGroupData[{
+Cell[7071, 209, 987, 23, 92, "Input",ExpressionUUID->"00d452be-01c4-4ae8-b925-baadeb0c6c72",
+ InitializationCell->True],
+Cell[8061, 234, 324, 4, 70, "Output",ExpressionUUID->"75f5ee5e-e0fa-46b6-ac9f-46f98aceea1a"]
+}, Open  ]],
+Cell[8400, 241, 1582, 37, 132, "Input",ExpressionUUID->"d5a4040d-a38d-426e-a36f-32067e757b76",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10019, 283, 284, 6, 36, "Subsection",ExpressionUUID->"47626a73-1b96-45ed-bb3f-559067acf6af",
+ InitializationCell->True],
+Cell[10306, 291, 270, 8, 31, "Input",ExpressionUUID->"c18d5521-5807-4671-9562-addf975ac629",
+ InitializationCell->True],
+Cell[10579, 301, 5365, 116, 712, "Input",ExpressionUUID->"e57e3604-1d25-4817-a640-0a7338bd87d7",
+ InitializationCell->True]
+}, Open  ]]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
