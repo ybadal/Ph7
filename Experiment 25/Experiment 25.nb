@@ -1,0 +1,520 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     19889,        512]
+NotebookOptionsPosition[     18029,        474]
+NotebookOutlinePosition[     18364,        489]
+CellTagsIndexPosition[     18321,        486]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Experiment 25 - Balmer Lines of Hydrogen and Deuterium", "Title",
+ CellChangeTimes->{{3.7339680700376577`*^9, 
+  3.7339681085735197`*^9}},ExpressionUUID->"6c0369d8-d9e5-405b-bbf6-\
+ed1b9564a013"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"<<", "CurveFit`"}]], "Input",
+ CellChangeTimes->{{3.733968055683631*^9, 3.733968060277768*^9}},
+ CellLabel->"In[4]:=",ExpressionUUID->"8aa7edeb-0d68-475f-992e-0979e22f1bb6"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"CurveFit for Mathematica v7.x thru v11.x, Version 1.96, \
+4/4/2018\"\>"], "Print",
+ CellChangeTimes->{3.733968060867462*^9, 3.733972550503141*^9, 
+  3.7339863388167477`*^9},
+ CellLabel->
+  "During evaluation of \
+In[4]:=",ExpressionUUID->"f6106fe5-68a7-438f-83e3-80badad6c90c"],
+
+Cell[BoxData["\<\"Caltech Sophomore Physics Labs, Pasadena, CA\"\>"], "Print",
+ CellChangeTimes->{3.733968060867462*^9, 3.733972550503141*^9, 
+  3.7339863388443823`*^9},
+ CellLabel->
+  "During evaluation of \
+In[4]:=",ExpressionUUID->"8951ac8c-eee5-4782-ab99-2248cfedc7e6"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.733971488143033*^9, 3.7339714992155848`*^9}},
+ CellLabel->"In[95]:=",ExpressionUUID->"afe849c3-c72f-4b07-a487-7c02935b92d2"],
+
+Cell[CellGroupData[{
+
+Cell["Peak-finding function", "Section",
+ CellChangeTimes->{{3.7339726751507673`*^9, 3.733972679566833*^9}, 
+   3.733976740903718*^9},ExpressionUUID->"18bd958f-9cfd-4617-a314-\
+0ab4e7096b84"],
+
+Cell["\<\
+To make the calibration process easier, we write a quick algorithm to find \
+peaks in a reasonably-restricted dataset (in the broad spectra, finding peaks \
+quickly becomes intractable because of noise and complex features in the \
+spectra not corresponding to Balmer lines), and a second function to find the \
+full-width at half maximum in restricted datasets with a single peak.\
+\>", "Text",
+ CellChangeTimes->{{3.733972681960249*^9, 3.733972785454857*^9}, {
+  3.734032713333709*^9, 
+  3.734032739981277*^9}},ExpressionUUID->"211816c1-2aaf-45da-8ef2-\
+68a1f377ec82"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Finds", " ", "peaks", " ", "and", " ", "displays", " ", "plots", " ", 
+    "for", " ", "visual", " ", 
+    RowBox[{"confirmation", ".", " ", "Selects"}], " ", "for", " ", "peaks", 
+    " ", "that", " ", "survive", " ", "Gaussian", " ", "blurring", " ", 
+    "\[Sigma]", " ", "to", " ", "account", " ", "for", " ", "noise"}], " ", 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"peakEstimate", "[", 
+    RowBox[{"filename_", ",", "\[Sigma]_"}], "]"}], ":=", 
+   "\[IndentingNewLine]", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "data", ",", "rawData", ",", "peaks", ",", "listPeaks", ",", "interFun",
+        ",", "p1", ",", "p2"}], "}"}], ",", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"data", "=", 
+        RowBox[{"Import", "[", "filename", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"rawData", "=", 
+        RowBox[{
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"data", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "\[Equal]", "\"\<#\>\""}], ",",
+              "Null", ",", 
+             RowBox[{"data", "[", 
+              RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "1", ",", 
+             RowBox[{"Length", "[", "data", "]"}]}], "}"}]}], "]"}], "/.", 
+         RowBox[{"Null", "\[Rule]", 
+          RowBox[{"Sequence", "[", "]"}]}]}]}], ";", " ", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "removing", " ", "comments", " ", "and", " ", "headers", " ", "from", 
+         " ", "data"}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"peaks", "=", 
+        RowBox[{"FindPeaks", "[", 
+         RowBox[{
+          RowBox[{"rawData", "[", 
+           RowBox[{"[", 
+            RowBox[{"All", ",", "2"}], "]"}], "]"}], ",", "\[Sigma]"}], 
+         "]"}]}], ";", " ", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "we", " ", "select", " ", "for", " ", "peaks", " ", "surviving", " ", 
+         "a", " ", "Gaussian", " ", "blurring", " ", "with", " ", "\[Sigma]", 
+         " ", "to", " ", "account", " ", "for", " ", "noise"}], " ", "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{"listPeaks", "=", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"rawData", "[", 
+           RowBox[{"[", 
+            RowBox[{"Floor", "[", 
+             RowBox[{
+              RowBox[{"peaks", "[", 
+               RowBox[{"[", "i", "]"}], "]"}], "[", 
+              RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"Length", "[", "peaks", "]"}]}], "}"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"interFun", "=", 
+        RowBox[{"Interpolation", "[", "rawData", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"p1", "=", 
+        RowBox[{"ListLogPlot", "[", 
+         RowBox[{"listPeaks", ",", 
+          RowBox[{"PlotRange", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"rawData", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], "[", 
+                RowBox[{"[", "1", "]"}], "]"}], ",", 
+               RowBox[{
+                RowBox[{"rawData", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"Length", "[", "rawData", "]"}], "]"}], "]"}], "[", 
+                
+                RowBox[{"[", "1", "]"}], "]"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"0.9", " ", 
+                RowBox[{"Min", "[", 
+                 RowBox[{"rawData", "[", 
+                  RowBox[{"[", 
+                   RowBox[{"All", ",", "2"}], "]"}], "]"}], "]"}]}], ",", 
+               "All"}], "}"}]}], "}"}]}], ",", 
+          RowBox[{"FrameLabel", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{"\"\<Wavelength (nm)\>\"", ",", "\"\<Intensity\>\""}], 
+            "}"}]}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"p2", "=", 
+        RowBox[{"LogPlot", "[", 
+         RowBox[{
+          RowBox[{"interFun", "[", "x", "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"x", ",", 
+            RowBox[{
+             RowBox[{"rawData", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{"rawData", "[", 
+              RowBox[{"[", 
+               RowBox[{"Length", "[", "rawData", "]"}], "]"}], "]"}], "[", 
+             RowBox[{"[", "1", "]"}], "]"}]}], "}"}], ",", 
+          RowBox[{"FrameLabel", "\[Rule]", 
+           RowBox[{"{", 
+            RowBox[{"\"\<Wavelength (nm)\>\"", ",", "\"\<Intensity\>\""}], 
+            "}"}]}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"listPeaks", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], ",", 
+         RowBox[{"Show", "[", 
+          RowBox[{"p1", ",", "p2", ",", 
+           RowBox[{"ImageSize", "\[Rule]", "Medium"}]}], "]"}]}], "}"}]}], 
+      ")"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQBWIQbcdx+tWfi68dJaTPGv4F0o/fLjUD0dO4z5iDaLeQ
+B6L/gHTQ9UXSIFrh+HN9EP2I7TWY/nDgkhmIPvFCwAJEL395wxpEx6TfBtOz
+bh6wB9Gx9246gWifxM1uIPqJ3RR/EJ2U7hQFon/8jM0Cy3PsLQLRnEtbykB0
+wY49tSD61PGOJhD9J/HHWhDNov9sM4jmqZ9Zy3zptWOya0wTiDbz3c3MAqRd
+d54D07qdLUGsQHrHjT+hIDp8//G/0kA6bMdmZhkgXXeckx9Enwl8JACi/57d
+Jgai2R5dANOa9tXSIDqYvVwORKcn52qDaINvv3RB9LXAXhsQrfLZzQFEAwA3
+a8Bk
+  "],
+ CellLabel->
+  "In[130]:=",ExpressionUUID->"b364ffd3-0ade-4ca9-8734-f0ad5650068a"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Finds", " ", "full"}], "-", 
+     RowBox[{"width", " ", "at", " ", "half"}], "-", 
+     RowBox[{
+     "maximum", " ", "for", " ", "a", " ", "selected", " ", "peak"}]}], ",", 
+    " ", 
+    RowBox[{
+    "assuming", " ", "the", " ", "section", " ", "in", " ", "the", " ", 
+     "file", " ", "has", " ", "a", " ", "single", " ", "peak", " ", "as", " ",
+      "only", " ", 
+     RowBox[{"feature", ".", " ", "This"}], " ", "should", " ", "be", " ", 
+     "sufficient", " ", "for", " ", "the", " ", "calibration", " ", 
+     RowBox[{"data", "."}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"fwhm", "[", 
+    RowBox[{"filename_", ",", "peakLocation_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "data", ",", "rawData", ",", "interFun", ",", "halfMax", ",", "lowHalf",
+        ",", "highHalf", ",", "x", ",", "y"}], "}"}], ",", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"data", "=", 
+        RowBox[{"Import", "[", "filename", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"rawData", "=", 
+        RowBox[{
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{
+               RowBox[{"data", "[", 
+                RowBox[{"[", "i", "]"}], "]"}], "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "\[Equal]", "\"\<#\>\""}], ",",
+              "Null", ",", 
+             RowBox[{"data", "[", 
+              RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "1", ",", 
+             RowBox[{"Length", "[", "data", "]"}]}], "}"}]}], "]"}], "/.", 
+         RowBox[{"Null", "\[Rule]", 
+          RowBox[{"Sequence", "[", "]"}]}]}]}], ";", " ", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "removing", " ", "comments", " ", "and", " ", "headers", " ", "from", 
+         " ", "data"}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"interFun", "=", 
+        RowBox[{"Interpolation", "[", "rawData", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"halfMax", "=", 
+        RowBox[{
+         RowBox[{"peakLocation", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], "/", "2"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"lowHalf", "=", 
+        RowBox[{"x", "/.", 
+         RowBox[{"FindRoot", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"interFun", "[", "x", "]"}], "\[Equal]", "halfMax"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"x", ",", 
+             RowBox[{
+              RowBox[{"peakLocation", "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "+", "0.1"}], ",", 
+             RowBox[{"peakLocation", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], ",", 
+             RowBox[{
+              RowBox[{"rawData", "[", 
+               RowBox[{"[", 
+                RowBox[{"Length", "[", "rawData", "]"}], "]"}], "]"}], "[", 
+              RowBox[{"[", "1", "]"}], "]"}]}], "}"}]}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"highHalf", "=", 
+        RowBox[{"y", "/.", 
+         RowBox[{"FindRoot", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"interFun", "[", "y", "]"}], "\[Equal]", "halfMax"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"y", ",", 
+             RowBox[{
+              RowBox[{"peakLocation", "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "-", "0.1"}], ",", 
+             RowBox[{
+              RowBox[{"rawData", "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "[", 
+              RowBox[{"[", "1", "]"}], "]"}], ",", 
+             RowBox[{"peakLocation", "[", 
+              RowBox[{"[", "1", "]"}], "]"}]}], "}"}]}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Abs", "[", 
+        RowBox[{"highHalf", "-", "lowHalf"}], "]"}]}], ")"}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.73398639481186*^9, 3.733986498530479*^9}, {
+  3.733986603930834*^9, 3.73398670732308*^9}, {3.7339868156265993`*^9, 
+  3.7339868990911207`*^9}, {3.7339869483391647`*^9, 3.7339870090514603`*^9}, {
+  3.733987042306808*^9, 3.733987256219644*^9}, {3.7339876177723713`*^9, 
+  3.733987648420107*^9}, {3.733987814206354*^9, 3.733987840956402*^9}, {
+  3.7339880662938223`*^9, 3.733988095640257*^9}, {3.733988127206027*^9, 
+  3.733988128901498*^9}},
+ CellLabel->
+  "In[113]:=",ExpressionUUID->"6a84d4e2-2e42-4bc0-8c30-88fc6209f965"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Calibrating the Monochromator using NIST data for the Hg-lines\
+\>", "Section",
+ CellChangeTimes->{{3.734032961005146*^9, 
+  3.7340329746293383`*^9}},ExpressionUUID->"000165a9-6e63-45cb-9d3c-\
+ca22399c8d88"],
+
+Cell["\<\
+We calibrate the monochromator (note that we will be doing all observations \
+in second order, therefore we calibrate our second order observations with \
+the actual lines in first order) and expect a linear fit with slope ~2. We \
+have to go up to a Gaussian smoothing with \[Sigma]=28 to get rid of unwanted \
+peaks, at which point the functions accurately finds all desired peaks, as \
+shown:\
+\>", "Text",
+ CellChangeTimes->{{3.734033113583384*^9, 3.734033184981381*^9}, {
+  3.73403690213422*^9, 
+  3.7340369457905617`*^9}},ExpressionUUID->"0413ff41-e18f-4a9f-b5fe-\
+877cce74908c"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"calList", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<365119.dat\>\"", ",", "\"\<365588.dat\>\"", ",", 
+     "\"\<366432.dat\>\"", ",", "\"\<404770.dat\>\"", ",", 
+     "\"\<435955.dat\>\"", ",", "\"\<546226.dat\>\"", ",", 
+     "\"\<577120.dat\>\"", ",", "\"\<579227.dat\>\""}], "}"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.734035317959867*^9, 3.734035429038216*^9}, {
+  3.734035969479165*^9, 3.734035969614319*^9}},
+ CellLabel->
+  "In[122]:=",ExpressionUUID->"fdd14701-18a4-4da0-a920-bc942a6f610c"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "We", " ", "pull", " ", "the", " ", "expected", " ", "wavelength", " ", 
+    "from", " ", "NIST", " ", "data", " ", "from", " ", "the", " ", "comment",
+     " ", "added", " ", "to", " ", "each", " ", "file"}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"nist", "[", "filename_", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", "data", "}"}], ",", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"data", "=", 
+        RowBox[{"Import", "[", "filename", "]"}]}], ";", 
+       RowBox[{
+        RowBox[{"data", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}], ")"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.7340388896233683`*^9, 3.734038961606927*^9}, {
+  3.734039029463167*^9, 3.734039088199222*^9}},
+ CellLabel->
+  "In[148]:=",ExpressionUUID->"a7e7820a-7f86-480e-801a-130e84a51ecd"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"hgPeaks", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"#", ",", 
+       RowBox[{"nist", "[", "#", "]"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"peakEstimate", "[", 
+          RowBox[{"#", ",", "28"}], "]"}], "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"peakEstimate", "[", 
+          RowBox[{"#", ",", "28"}], "]"}], "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", "2", "]"}], "]"}], ",", 
+       RowBox[{
+        RowBox[{"peakEstimate", "[", 
+         RowBox[{"#", ",", "28"}], "]"}], "[", 
+        RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "&"}], "/@", "calList"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.7340354354804296`*^9, 3.734035449662018*^9}, {
+  3.73403554375403*^9, 3.7340355829259644`*^9}, {3.7340356166629753`*^9, 
+  3.734035617742076*^9}, {3.734035761605917*^9, 3.734035762375359*^9}, {
+  3.734035855598165*^9, 3.734035904185878*^9}, {3.734035990199718*^9, 
+  3.734036090312029*^9}, {3.734036206206953*^9, 3.734036218626349*^9}, {
+  3.734037060767982*^9, 3.734037066862444*^9}, {3.734038758143578*^9, 
+  3.734038765398754*^9}, {3.734039096615101*^9, 3.7340392192952757`*^9}, {
+  3.734039305856786*^9, 3.7340393402965393`*^9}, {3.734040348586399*^9, 
+  3.7340403859677896`*^9}},
+ CellLabel->
+  "In[163]:=",ExpressionUUID->"71f284c2-ecb4-4336-8d6f-fbc906ec76b9"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"unc", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"2.355", " ", 
+      RowBox[{"fwhm", "[", 
+       RowBox[{
+        RowBox[{"#", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"#", "[", 
+           RowBox[{"[", "3", "]"}], "]"}], ",", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "4", "]"}], "]"}]}], "}"}]}], "]"}]}], "&"}], "/@", 
+    "hgPeaks"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.734039345417574*^9, 3.7340393617669697`*^9}, {
+   3.73404008844726*^9, 3.734040141064726*^9}, {3.734040217674107*^9, 
+   3.734040262527238*^9}, {3.734040403919222*^9, 3.73404047128088*^9}, {
+   3.734041909209301*^9, 3.7340419171367903`*^9}, 3.734041980145331*^9},
+ CellLabel->
+  "In[170]:=",ExpressionUUID->"d07b4b80-95c4-4f7d-ad16-ed780191882d"],
+
+Cell["\<\
+We estimate the uncertainties in peak position by 2.355*FWHM, where FWHM is \
+the full-width at half-maximum. \
+\>", "Text",
+ CellChangeTimes->{{3.734041929475769*^9, 3.734041949895351*^9}, {
+  3.734041983111436*^9, 
+  3.734042017207363*^9}},ExpressionUUID->"a21b7657-d2b4-4b1e-b4d9-\
+36025abbf134"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1276, 1396},
+WindowMargins->{{2, Automatic}, {Automatic, 20}},
+FrontEndVersion->"11.3 for Linux x86 (64-bit) (March 6, 2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 201, 3, 99, "Title",ExpressionUUID->"6c0369d8-d9e5-405b-bbf6-ed1b9564a013"],
+Cell[CellGroupData[{
+Cell[806, 29, 197, 3, 31, "Input",ExpressionUUID->"8aa7edeb-0d68-475f-992e-0979e22f1bb6"],
+Cell[CellGroupData[{
+Cell[1028, 36, 295, 6, 25, "Print",ExpressionUUID->"f6106fe5-68a7-438f-83e3-80badad6c90c"],
+Cell[1326, 44, 273, 5, 25, "Print",ExpressionUUID->"8951ac8c-eee5-4782-ab99-2248cfedc7e6"]
+}, Open  ]]
+}, Open  ]],
+Cell[1626, 53, 270, 5, 31, "Input",ExpressionUUID->"afe849c3-c72f-4b07-a487-7c02935b92d2"],
+Cell[CellGroupData[{
+Cell[1921, 62, 191, 3, 68, "Section",ExpressionUUID->"18bd958f-9cfd-4617-a314-0ab4e7096b84"],
+Cell[2115, 67, 580, 10, 84, "Text",ExpressionUUID->"211816c1-2aaf-45da-8ef2-68a1f377ec82"],
+Cell[2698, 79, 5812, 145, 285, "Input",ExpressionUUID->"b364ffd3-0ade-4ca9-8734-f0ad5650068a"],
+Cell[8513, 226, 4505, 110, 239, "Input",ExpressionUUID->"6a84d4e2-2e42-4bc0-8c30-88fc6209f965"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13055, 341, 217, 5, 68, "Section",ExpressionUUID->"000165a9-6e63-45cb-9d3c-ca22399c8d88"],
+Cell[13275, 348, 595, 11, 84, "Text",ExpressionUUID->"0413ff41-e18f-4a9f-b5fe-877cce74908c"],
+Cell[13873, 361, 542, 13, 31, "Input",ExpressionUUID->"fdd14701-18a4-4da0-a920-bc942a6f610c"],
+Cell[14418, 376, 937, 24, 78, "Input",ExpressionUUID->"a7e7820a-7f86-480e-801a-130e84a51ecd"],
+Cell[15358, 402, 1482, 35, 31, "Input",ExpressionUUID->"71f284c2-ecb4-4336-8d6f-fbc906ec76b9"],
+Cell[16843, 439, 846, 22, 31, "Input",ExpressionUUID->"d07b4b80-95c4-4f7d-ad16-ed780191882d"],
+Cell[17692, 463, 309, 7, 36, "Text",ExpressionUUID->"a21b7657-d2b4-4b1e-b4d9-36025abbf134"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
